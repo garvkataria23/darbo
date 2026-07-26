@@ -717,16 +717,16 @@ function showToast(message) {
 const storesData = [
   {
     id: 1,
-    name: "DARBO Head Office & Flagship Studio",
-    category: "flagship",
+    name: "DARBO Headquarters",
+    category: "online",
     city: "Mumbai",
     pincode: "400103",
     lat: 19.2435,
     lng: 72.8465,
     address: "Shop No. 1 Link Bird CHSL 2, Shanti Ashram Rd, Devki Nagar, Borivali West, Mumbai, Maharashtra 400103",
-    hours: "10:00 AM - 8:00 PM IST",
+    hours: "Office: Mon–Sat, 10:00 AM - 6:00 PM IST",
     phone: "+91 8355983699",
-    status: "Open Now",
+    status: "Online Store",
     image: "images/hero_models.jpg"
   }
 ];
@@ -769,6 +769,7 @@ function createCustomMapIcon(category) {
   if (category === 'flagship') emoji = '🏬';
   else if (category === 'custom') emoji = '🎨';
   else if (category === 'express') emoji = '🚀';
+  else if (category === 'online') emoji = '🌐';
 
   return L.divIcon({
     className: 'custom-leaflet-marker',
@@ -834,7 +835,7 @@ function renderStoreListCards(stores) {
   if (!container) return;
 
   if (stores.length === 0) {
-    container.innerHTML = `<div style="text-align:center; padding:2rem; color:var(--text-muted);">No hubs found for your search. Try searching "Mumbai", "Delhi", or "400050".</div>`;
+    container.innerHTML = `<div style="text-align:center; padding:2rem; color:var(--text-muted);">DARBO is an online-exclusive store. We ship pan-India — order from anywhere!</div>`;
     return;
   }
 
