@@ -1,0 +1,5 @@
+.agents/
+skills-lock.json
+scratch/
+node_modules/
+.vercel/

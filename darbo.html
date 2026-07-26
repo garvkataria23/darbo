@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DARBO — Own Your Story | Trendy Printed Streetwear & Custom Outfits</title>
+  <meta name="description" content="DARBO — Printed for you. Made by you. Explore custom graphic T-shirts, oversized hoodies, meme collections and personalized outfits." />
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="images/logo.png" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- CSS Stylesheets -->
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/animations.css" />
+
+  <!-- Leaflet Maps CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+
+  <!-- Lucide Icons via CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+
+  <!-- TOP ANNOUNCEMENT BAR (INFINITE MARQUEE TICKER) -->
+  <div class="top-announcement-bar">
+    <div class="announcement-track">
+      <div class="announcement-content">
+        <span><span class="sparkle">✦</span> Free shipping on all orders above ₹999</span>
+        <span><span class="sparkle">✦</span> You Imagine It. We Print It.</span>
+        <span><span class="sparkle">✦</span> Custom Printed Streetwear & Hoodies</span>
+        <span><span class="sparkle">✦</span> Shanti Ashram, Borivali Studio Open</span>
+      </div>
+      <div class="announcement-content" aria-hidden="true">
+        <span><span class="sparkle">✦</span> Free shipping on all orders above ₹999</span>
+        <span><span class="sparkle">✦</span> You Imagine It. We Print It.</span>
+        <span><span class="sparkle">✦</span> Custom Printed Streetwear & Hoodies</span>
+        <span><span class="sparkle">✦</span> Shanti Ashram, Borivali Studio Open</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- NAVIGATION NAVBAR -->
+  <nav class="navbar">
+    <div class="container navbar-container">
+      
+      <!-- LOGO -->
+      <a href="#home" class="nav-logo" title="DARBO — Own Your Story">
+        <img src="images/logo.png" alt="DARBO — Own Your Story" class="logo-img" />
+      </a>
+
+      <!-- NAV LINKS -->
+      <ul class="nav-links">
+        <li><a href="#home" class="nav-link active">Home</a></li>
+        <li><a href="#bestsellers" class="nav-link">Shop</a></li>
+        <li><a href="#collections" class="nav-link">Collections</a></li>
+        <li><a href="#customizer" class="nav-link">Custom Outfit</a></li>
+        <li><a href="#about" class="nav-link">About Us</a></li>
+        <li><a href="#contactSection" class="nav-link">Contact</a></li>
+      </ul>
+
+      <!-- NAV ACTIONS RIGHT -->
+      <div class="nav-actions">
+        <button class="nav-action-btn" title="Search" onclick="openSearchModal()">
+          <i data-lucide="search" style="width:20px;height:20px;"></i>
+        </button>
+        <a href="login.html" class="nav-action-btn" title="Account / Sign In">
+          <i data-lucide="user" style="width:20px;height:20px;"></i>
+        </a>
+        <button class="nav-action-btn" title="Shopping Bag" onclick="toggleCart()">
+          <i data-lucide="shopping-bag" style="width:20px;height:20px;"></i>
+          <span class="cart-badge" id="cartBadgeCount">2</span>
+        </button>
+        <button class="mobile-toggle" aria-label="Toggle navigation menu" onclick="toggleMobileNav()">
+          <i data-lucide="menu" style="width:24px;height:24px;"></i>
+        </button>
+      </div>
+
+    </div>
+  </nav>
+
+  <!-- MOBILE NAVIGATION DRAWER -->
+  <div class="mobile-nav-overlay" id="mobileNavOverlay" onclick="if(event.target===this)closeMobileNav()">
+    <div class="mobile-nav-drawer">
+      <div class="mobile-nav-header">
+        <a href="#home" class="nav-logo" onclick="closeMobileNav()">
+          <img src="images/logo.png" alt="DARBO — Own Your Story" class="logo-img" />
+        </a>
+        <button class="close-mobile-nav-btn" onclick="closeMobileNav()" aria-label="Close menu">✕</button>
+      </div>
+
+      <div class="mobile-nav-body">
+        <ul class="mobile-nav-links">
+          <li><a href="#home" class="mobile-nav-link active" onclick="closeMobileNav()">Home</a></li>
+          <li><a href="#bestsellers" class="mobile-nav-link" onclick="closeMobileNav()">Shop All</a></li>
+          <li><a href="#collections" class="mobile-nav-link" onclick="closeMobileNav()">Collections</a></li>
+          <li><a href="#customizer" class="mobile-nav-link" onclick="closeMobileNav()">Custom Outfit Studio</a></li>
+          <li><a href="#about" class="mobile-nav-link" onclick="closeMobileNav()">About Us</a></li>
+          <li><a href="#contact" class="mobile-nav-link" onclick="closeMobileNav()">Contact Us</a></li>
+        </ul>
+
+        <div class="mobile-nav-actions">
+          <button class="mobile-nav-action-btn" onclick="closeMobileNav(); openSearchModal();">
+            <i data-lucide="search" style="width:18px;height:18px;"></i> Search Products
+          </button>
+          <button class="mobile-nav-action-btn" onclick="closeMobileNav(); toggleCart();">
+            <i data-lucide="shopping-bag" style="width:18px;height:18px;"></i> Shopping Bag
+          </button>
+          <a href="https://wa.me/918355983699?text=Hi%20DARBO!%20Need%20help%20with%20an%20order." target="_blank" class="mobile-whatsapp-btn">
+            💬 Chat on WhatsApp
+          </a>
+        </div>
+      </div>
+
+      <div class="mobile-nav-footer">
+        <p>Follow DARBO</p>
+        <div class="social-icons">
+          <a href="#" class="social-icon-btn"><i data-lucide="instagram" style="width:16px;height:16px;"></i></a>
+          <a href="#" class="social-icon-btn"><i data-lucide="facebook" style="width:16px;height:16px;"></i></a>
+          <a href="#" class="social-icon-btn"><i data-lucide="twitter" style="width:16px;height:16px;"></i></a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HERO SECTION -->
+  <section id="home" class="hero-section">
+    <div class="container hero-grid">
+      
+      <!-- HERO LEFT CONTENT -->
+      <div class="hero-content animate-on-scroll">
+        <span class="hero-eyebrow">OWN YOUR STORY</span>
+        <h1 class="hero-title animate-on-scroll">
+          You Imagine it.<br />
+          We <span class="pink-accent">print it.
+            <svg class="sparkle-icon sparkle-element" viewBox="0 0 24 24" fill="none">
+              <path d="M12 0L14.59 9.41L24 12L14.59 14.59L12 24L9.41 14.59L0 12L9.41 9.41L12 0Z" fill="#F07167"/>
+            </svg>
+          </span>
+        </h1>
+        <p class="hero-description">
+          Trendy prints, memorable events, iconic memes – we turn what you love into what you wear.
+        </p>
+
+        <div class="hero-buttons">
+          <a href="#bestsellers" class="btn-primary-pill">
+            Shop Now
+            <span class="btn-arrow-icon">➔</span>
+          </a>
+          <a href="#customizer" class="btn-secondary-pill">
+            Customize Now
+            <span style="font-size:1.1rem;">✏️</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- HERO RIGHT VISUAL -->
+      <div class="hero-visual animate-on-scroll delay-1">
+        <div class="hero-arch-backdrop"></div>
+        <div class="hero-image-wrapper float-element">
+          <img src="images/hero_models.jpg" alt="DARBO Streetwear Models Back View" />
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FEATURES PROPOSITION FLOATING BAR -->
+  <section class="features-section">
+    <div class="container">
+      <div class="features-container animate-on-scroll">
+        
+        <!-- FEATURE 1 -->
+        <div class="feature-item">
+          <div class="feature-icon-box">
+            <i data-lucide="shirt"></i>
+          </div>
+          <div class="feature-info">
+            <h4>Trendy Designs</h4>
+            <p>Stay ahead with the latest trends & meme prints.</p>
+          </div>
+        </div>
+
+        <!-- FEATURE 2 -->
+        <div class="feature-item">
+          <div class="feature-icon-box">
+            <i data-lucide="pen-tool"></i>
+          </div>
+          <div class="feature-info">
+            <h4>Custom Outfits</h4>
+            <p>Your idea, your style. We make it real.</p>
+          </div>
+        </div>
+
+        <!-- FEATURE 3 -->
+        <div class="feature-item">
+          <div class="feature-icon-box">
+            <i data-lucide="calendar"></i>
+          </div>
+          <div class="feature-info">
+            <h4>Event-Based Prints</h4>
+            <p>Celebrate moments with exclusive designs.</p>
+          </div>
+        </div>
+
+        <!-- FEATURE 4 -->
+        <div class="feature-item">
+          <div class="feature-icon-box">
+            <i data-lucide="truck"></i>
+          </div>
+          <div class="feature-info">
+            <h4>Premium Quality</h4>
+            <p>Top-notch fabric, vibrant prints, lasting comfort.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPLORE COLLECTIONS SECTION -->
+  <section id="collections" class="collections-section">
+    <div class="container collections-grid">
+      
+      <!-- LEFT TEXT COLUMN -->
+      <div class="collections-text-card animate-on-scroll">
+        <span class="collections-eyebrow">EXPLORE COLLECTIONS</span>
+        <h2 class="collections-title">
+          Wear what<br />speaks <span class="text-coral">you.</span>
+        </h2>
+        <a href="#bestsellers" class="btn-primary-pill">
+          View All Collections
+          <span class="btn-arrow-icon">➔</span>
+        </a>
+      </div>
+
+      <!-- RIGHT 4 CARDS GRID -->
+      <div class="collections-cards-grid animate-on-scroll delay-1">
+        
+        <!-- CARD 1 -->
+        <div class="collection-card" onclick="filterAndScroll('T-Shirts')">
+          <img src="images/trending_now.jpg" alt="Trending Now Collection" loading="lazy" />
+          <div class="collection-card-overlay">
+            <div class="collection-pill-btn">
+              <span>Trending Now</span>
+              <span class="collection-arrow">➔</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- CARD 2 -->
+        <div class="collection-card" onclick="filterAndScroll('Hoodies')">
+          <img src="images/meme_collection.jpg" alt="Meme Collection" loading="lazy" />
+          <div class="collection-card-overlay">
+            <div class="collection-pill-btn">
+              <span>Meme Collection</span>
+              <span class="collection-arrow">➔</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- CARD 3 -->
+        <div class="collection-card" onclick="filterAndScroll('Oversized')">
+          <img src="images/event_specials.jpg" alt="Event Specials Collection" loading="lazy" />
+          <div class="collection-card-overlay">
+            <div class="collection-pill-btn">
+              <span>Event Specials</span>
+              <span class="collection-arrow">➔</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- CARD 4 -->
+        <div class="collection-card" onclick="filterAndScroll('Custom')">
+          <img src="images/custom_made.jpg" alt="Custom Made Collection" loading="lazy" />
+          <div class="collection-card-overlay">
+            <div class="collection-pill-btn">
+              <span>Custom Made</span>
+              <span class="collection-arrow">➔</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CUSTOM OUTFIT STUDIO SECTION ("Imagine it. We'll print it.") -->
+  <section id="customizer" class="customizer-section">
+    <div class="container">
+      <div class="customizer-card animate-on-scroll">
+        
+        <!-- COLUMN 1: LIVE INTERACTIVE PREVIEW -->
+        <div class="customizer-preview-box">
+          <div class="shirt-mockup-wrapper">
+            <img src="images/custom_tee_mockup.jpg" alt="Custom Tee Preview" class="shirt-mockup-img" />
+            <div class="dashed-print-area">
+              <span class="dashed-print-text" id="dashedPrintText">YOUR DESIGN HERE</span>
+            </div>
+          </div>
+
+          <div style="margin-top: 1rem;">
+            <input type="text" id="customTextInput" placeholder="Type custom print text..." 
+                   style="width: 100%; padding: 0.5rem 0.75rem; border: 1px solid var(--border-light); border-radius: var(--radius-pill); font-size: 0.82rem; text-align: center; outline: none;" />
+          </div>
+
+          <div class="studio-color-picker">
+            <div class="studio-swatch active" style="background:#FFF0F3;" onclick="selectStudioColor('#FFF0F3')"></div>
+            <div class="studio-swatch" style="background:#1A1A1A;" onclick="selectStudioColor('#1A1A1A')"></div>
+            <div class="studio-swatch" style="background:#FFFFFF;" onclick="selectStudioColor('#FFFFFF')"></div>
+            <div class="studio-swatch" style="background:#F5F0EB;" onclick="selectStudioColor('#F5F0EB')"></div>
+            <div class="studio-swatch" style="background:#B0C4DE;" onclick="selectStudioColor('#B0C4DE')"></div>
+          </div>
+        </div>
+
+        <!-- COLUMN 2: CENTER TEXT CONTENT -->
+        <div class="customizer-content">
+          <span class="customizer-eyebrow">MAKE IT TRULY YOURS</span>
+          <h2 class="customizer-title">
+            Imagine it.<br />We'll print it.
+          </h2>
+          <p class="customizer-desc">
+            From your ideas to your favorite moments, we create outfits that are 100% you.
+          </p>
+
+          <div style="margin-bottom: 1.25rem; width:100%;">
+            <div style="font-size:0.8rem; font-weight:700; color:var(--text-dark); margin-bottom:0.4rem;">Quick Graphic Presets:</div>
+            <div class="customizer-options-grid">
+              <button class="preset-btn" onclick="setPresetText('GOOD VIBES ONLY')">🌸 GOOD VIBES</button>
+              <button class="preset-btn" onclick="setPresetText('CHILL MODE')">🕶️ CHILL MODE</button>
+              <button class="preset-btn" onclick="setPresetText('STAY WILD')">⚡ STAY WILD</button>
+              <button class="preset-btn" onclick="setPresetText('MEMES & VIBES')">🔥 MEMES & VIBES</button>
+            </div>
+          </div>
+
+          <button class="btn-primary-pill" onclick="addCustomTeeToCart()">
+            Add Custom Shirt to Bag
+            <span class="btn-arrow-icon">➔</span>
+          </button>
+        </div>
+
+        <!-- COLUMN 3: RIGHT 3 STEPS -->
+        <div class="customizer-steps">
+          
+          <div class="customizer-step-item">
+            <div class="step-icon-circle">
+              <i data-lucide="shirt"></i>
+            </div>
+            <div class="step-details">
+              <h5>Pick Your Style</h5>
+              <p>Choose from a wide range of fits & colors.</p>
+            </div>
+          </div>
+
+          <div class="customizer-step-item">
+            <div class="step-icon-circle">
+              <i data-lucide="cloud-upload"></i>
+            </div>
+            <div class="step-details">
+              <h5>Share Your Idea</h5>
+              <p>Upload your design or tell us your idea.</p>
+            </div>
+          </div>
+
+          <div class="customizer-step-item">
+            <div class="step-icon-circle">
+              <i data-lucide="truck"></i>
+            </div>
+            <div class="step-details">
+              <h5>We Print & Deliver</h5>
+              <p>Premium quality, made just for you.</p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- BEST SELLERS SECTION ("Loved by many.") -->
+  <section id="bestsellers" class="bestsellers-section">
+    <div class="container">
+      
+      <!-- SECTION HEADER FLEX -->
+      <div class="section-header-flex animate-on-scroll">
+        <div>
+          <span class="section-eyebrow">BEST SELLERS</span>
+          <h2 class="section-title">
+            Loved by <span class="text-coral">many.</span>
+          </h2>
+        </div>
+        <a href="#collections" class="view-all-link">
+          View All Products
+          <span>➔</span>
+        </a>
+      </div>
+
+      <!-- FILTER TABS -->
+      <div class="filter-tabs animate-on-scroll">
+        <button class="filter-tab active" onclick="filterProducts('All')">All Drops</button>
+        <button class="filter-tab" onclick="filterProducts('T-Shirts')">T-Shirts 👕</button>
+        <button class="filter-tab" onclick="filterProducts('Hoodies')">Hoodies 🧥</button>
+        <button class="filter-tab" onclick="filterProducts('Oversized')">Oversized 🎨</button>
+        <button class="filter-tab" onclick="filterProducts('Custom')">Custom ✏️</button>
+        <select class="sort-dropdown" onchange="sortProducts(this.value)" style="padding:0.5rem 1rem; border-radius:999px; border:2px solid var(--border-subtle); font-family:var(--font-body); font-size:0.85rem; font-weight:600; background:white; cursor:pointer; outline:none; margin-left:auto;">
+          <option value="default">Sort By</option>
+          <option value="price-low">Price: Low → High</option>
+          <option value="price-high">Price: High → Low</option>
+          <option value="newest">Newest First</option>
+          <option value="popular">Most Popular</option>
+        </select>
+      </div>
+
+      <!-- PRODUCTS GRID -->
+      <div class="products-grid animate-on-scroll delay-1" id="productsGrid">
+        <!-- Rendered via JS -->
+      </div>
+      
+      <!-- RECENTLY VIEWED -->
+      <div style="margin-top: 3rem;" class="animate-on-scroll">
+        <h3 style="font-family:var(--font-heading); font-weight:800; font-size:1.4rem; margin-bottom:1rem;">Recently Viewed</h3>
+        <div id="recentlyViewedStrip"></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- INSTAGRAM / COMMUNITY SPOTLIGHT ("Real people. Real stories. Real style.") -->
+  <section class="social-section">
+    <div class="container">
+      <div class="social-card animate-on-scroll">
+        
+        <!-- LEFT TEXT CONTENT -->
+        <div class="social-content">
+          <span class="social-eyebrow">FOLLOW US @DARBO.OFFICIAL</span>
+          <h2 class="social-title">
+            Real people.<br />Real stories.<br />Real <span class="text-coral">style.</span>
+          </h2>
+          <a href="https://instagram.com" target="_blank" class="btn-primary-pill">
+            Follow Us on instagram
+            <span class="btn-arrow-icon">➔</span>
+          </a>
+        </div>
+
+        <!-- RIGHT CAROUSEL -->
+        <div class="social-gallery-wrapper">
+          <div class="social-carousel" id="socialCarousel">
+            <div class="social-photo-card"><img src="images/insta_story_1.jpg" alt="Customer Wearing Darbo Tee" loading="lazy" /></div>
+            <div class="social-photo-card"><img src="images/insta_story_2.jpg" alt="Customer Wearing Bloom Tee" loading="lazy" /></div>
+            <div class="social-photo-card"><img src="images/insta_story_3.jpg" alt="Customer Wearing Cream Hoodie" loading="lazy" /></div>
+            <div class="social-photo-card"><img src="images/insta_story_4.jpg" alt="Customer Wearing You Got This Tee" loading="lazy" /></div>
+          </div>
+          <button class="carousel-next-btn" title="Next" onclick="scrollSocialCarousel(1)">➔</button>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT US SECTION -->
+  <section id="about" class="about-section" style="padding: 6rem 0; background: linear-gradient(180deg, #FFF5F4 0%, #ffffff 100%);">
+    <div class="container">
+
+      <!-- Section Header -->
+      <div class="animate-on-scroll" style="text-align:center; margin-bottom:3.5rem;">
+        <span style="font-family:var(--font-heading); font-weight:800; font-size:0.85rem; letter-spacing:0.2em; color:var(--coral-primary); text-transform:uppercase;">The DARBO Story</span>
+        <h2 style="font-family:var(--font-heading); font-weight:900; font-size:2.8rem; color:var(--text-dark); margin-top:0.5rem; line-height:1.15;">
+          Own Your Story. <span style="color:var(--coral-primary);">Every Single Day.</span>
+        </h2>
+        <p style="color:var(--text-muted); font-size:1.05rem; max-width:650px; margin:1rem auto 0; line-height:1.7;">
+          Clothing isn't just fabric you wear — it’s the loudest declaration of who you are, what you love, and the vibe you bring into the room.
+        </p>
+      </div>
+
+      <!-- Story Deep Dive Grid -->
+      <div class="animate-on-scroll" style="display:grid; grid-template-columns:1.1fr 0.9fr; gap:3.5rem; align-items:center; margin-bottom:4rem;">
+        
+        <!-- Story Text -->
+        <div>
+          <h3 style="font-family:var(--font-heading); font-weight:800; font-size:1.8rem; color:var(--text-dark); margin-bottom:1.25rem;">How DARBO Was Born</h3>
+          
+          <p style="color:var(--text-muted); font-size:0.98rem; line-height:1.8; margin-bottom:1.25rem;">
+            In a world dominated by mass-produced clothing and generic fast-fashion logos, we asked ourselves one simple question: <em>"Why should streetwear feel so impersonal?"</em>
+          </p>
+          
+          <p style="color:var(--text-muted); font-size:0.98rem; line-height:1.8; margin-bottom:1.25rem;">
+            DARBO started in Mumbai with a singular mission — to build a brand where <strong>your ideas come to life on ultra-premium streetwear</strong>. From raw concepts and trending pop-culture memes to custom event fits and personal artwork, we bridges the gap between high-end streetwear aesthetics and custom personalization.
+          </p>
+          
+          <p style="color:var(--text-muted); font-size:0.98rem; line-height:1.8; margin-bottom:1.5rem;">
+            We craft heavyweight 220+ GSM 100% combed cotton garments that hold their shape, stay soft on the skin, and withstand hundreds of washes without losing color or print sharpness.
+          </p>
+
+          <!-- Core Pillars -->
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.2rem; margin-top:1.5rem;">
+            <div style="background:white; padding:1.2rem; border-radius:16px; border:1px solid var(--border-subtle); box-shadow:0 4px 15px rgba(0,0,0,0.03);">
+              <div style="font-size:1.4rem; margin-bottom:0.4rem;">🧵</div>
+              <div style="font-weight:800; font-size:0.95rem; color:var(--text-dark);">220+ GSM Heavyweight</div>
+              <div style="font-size:0.82rem; color:var(--text-muted); margin-top:0.25rem;">Built for long-lasting luxury fit & drape.</div>
+            </div>
+
+            <div style="background:white; padding:1.2rem; border-radius:16px; border:1px solid var(--border-subtle); box-shadow:0 4px 15px rgba(0,0,0,0.03);">
+              <div style="font-size:1.4rem; margin-bottom:0.4rem;">✨</div>
+              <div style="font-weight:800; font-size:0.95rem; color:var(--text-dark);">Zero Fade Prints</div>
+              <div style="font-size:0.82rem; color:var(--text-muted); margin-top:0.25rem;">Industrial-grade vibrant DTG & Screen prints.</div>
+            </div>
+          </div>
+
+          <div style="margin-top:2rem;">
+            <a href="https://wa.me/918355983699?text=Hi%20DARBO!%20I%20want%20to%20know%20more%20about%20your%20custom%20printing." target="_blank" class="btn-primary-pill">
+              Start Custom Order 💬
+              <i data-lucide="arrow-right" style="width:16px;height:16px;"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- Brand Showcase Card -->
+        <div style="position:relative;">
+          <div style="background:linear-gradient(135deg, #1E293B, #0F172A); border-radius:28px; padding:3rem 2.5rem; color:white; text-align:center; box-shadow:0 20px 40px rgba(0,0,0,0.15);">
+            <div style="width:70px; height:70px; background:rgba(240, 113, 103, 0.15); border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 1.5rem;">
+              <i data-lucide="sparkles" style="width:36px; height:36px; color:var(--coral-primary);"></i>
+            </div>
+            <h3 style="font-family:var(--font-heading); font-weight:900; font-size:2rem; margin-bottom:0.5rem; color:white;">You Imagine It.</h3>
+            <h3 style="font-family:var(--font-heading); font-weight:900; font-size:2rem; color:var(--coral-primary);">We Print It.</h3>
+            <p style="margin-top:1.2rem; opacity:0.85; font-size:0.92rem; line-height:1.6;">
+              Whether you need 1 custom oversized tee for yourself or 500 custom hoodies for your squad or corporate event, DARBO brings your imagination into reality.
+            </p>
+            <div style="margin-top:1.8rem; padding-top:1.5rem; border-top:1px solid rgba(255,255,255,0.1); display:flex; justify-content:center; gap:1.5rem; font-size:0.85rem; color:#94A3B8;">
+              <span>📍 Borivali West, Mumbai</span>
+              <span>⚡ 24hr Quick Turnaround</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Trust Stats Bar -->
+      <div class="animate-on-scroll" style="display:grid; grid-template-columns:repeat(4, 1fr); gap:1.5rem; margin-bottom:4rem;">
+        
+        <div style="text-align:center; padding:2rem 1rem; background:white; border-radius:20px; box-shadow:0 4px 20px rgba(0,0,0,0.05); border:1px solid var(--border-subtle);">
+          <div style="font-family:var(--font-heading); font-weight:900; font-size:2.5rem; color:var(--coral-primary);">1100+</div>
+          <div style="font-weight:700; font-size:0.9rem; color:var(--text-dark); margin-top:0.25rem;">Successful Orders</div>
+          <div style="color:var(--text-muted); font-size:0.8rem; margin-top:0.25rem;">Delivered across India 🚀</div>
+        </div>
+
+        <div style="text-align:center; padding:2rem 1rem; background:white; border-radius:20px; box-shadow:0 4px 20px rgba(0,0,0,0.05); border:1px solid var(--border-subtle);">
+          <div style="font-family:var(--font-heading); font-weight:900; font-size:2.5rem; color:var(--coral-primary);">120+</div>
+          <div style="font-weight:700; font-size:0.9rem; color:var(--text-dark); margin-top:0.25rem;">5-Star Reviews</div>
+          <div style="color:var(--text-muted); font-size:0.8rem; margin-top:0.25rem;">Rated by happy customers ⭐</div>
+        </div>
+
+        <div style="text-align:center; padding:2rem 1rem; background:white; border-radius:20px; box-shadow:0 4px 20px rgba(0,0,0,0.05); border:1px solid var(--border-subtle);">
+          <div style="font-family:var(--font-heading); font-weight:900; font-size:2.5rem; color:var(--coral-primary);">50+</div>
+          <div style="font-weight:700; font-size:0.9rem; color:var(--text-dark); margin-top:0.25rem;">Unique Collections</div>
+          <div style="color:var(--text-muted); font-size:0.8rem; margin-top:0.25rem;">Anime, Memes & Streetwear 🎨</div>
+        </div>
+
+        <div style="text-align:center; padding:2rem 1rem; background:white; border-radius:20px; box-shadow:0 4px 20px rgba(0,0,0,0.05); border:1px solid var(--border-subtle);">
+          <div style="font-family:var(--font-heading); font-weight:900; font-size:2.5rem; color:var(--coral-primary);">100%</div>
+          <div style="font-weight:700; font-size:0.9rem; color:var(--text-dark); margin-top:0.25rem;">Premium Combed Cotton</div>
+          <div style="color:var(--text-muted); font-size:0.8rem; margin-top:0.25rem;">Pre-shrunk bio-washed fabric 🧵</div>
+        </div>
+      </div>
+
+      <!-- Customer Reviews -->
+      <div class="animate-on-scroll" style="margin-bottom:2rem;">
+        <div style="text-align:center; margin-bottom:2.5rem;">
+          <span style="font-family:var(--font-heading); font-weight:800; font-size:0.85rem; letter-spacing:0.2em; color:var(--coral-primary); text-transform:uppercase;">Verified Feedback</span>
+          <h2 style="font-family:var(--font-heading); font-weight:900; font-size:2.2rem; color:var(--text-dark); margin-top:0.5rem;">Loved By 120+ Streetwear Enthusiasts ❤️</h2>
+        </div>
+
+        <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:1.5rem;">
+          
+          <!-- Review 1 -->
+          <div style="background:white; border-radius:20px; padding:2rem; box-shadow:0 4px 20px rgba(0,0,0,0.05); border:1px solid var(--border-subtle);">
+            <div style="display:flex; align-items:center; gap:0.75rem; margin-bottom:1rem;">
+              <div style="width:44px; height:44px; border-radius:50%; background:linear-gradient(135deg, var(--coral-primary), #FF8A80); display:flex; align-items:center; justify-content:center; color:white; font-weight:800; font-size:1.1rem;">R</div>
+              <div>
+                <div style="font-weight:700; font-size:0.95rem; color:var(--text-dark);">Rahul Sharma</div>
+                <div style="color:#F59E0B; font-size:0.85rem;">⭐⭐⭐⭐⭐</div>
+              </div>
+            </div>
+            <p style="color:var(--text-muted); font-size:0.9rem; line-height:1.7;">"Ordered a custom oversized tee with my own artwork. The print quality is INSANE — crisp, vibrant, and hasn't faded after 10+ washes. DARBO is legit! 🔥"</p>
+            <div style="margin-top:1rem; font-size:0.8rem; color:var(--text-muted);">Verified Buyer • Mumbai</div>
+          </div>
+
+          <!-- Review 2 -->
+          <div style="background:white; border-radius:20px; padding:2rem; box-shadow:0 4px 20px rgba(0,0,0,0.05); border:1px solid var(--border-subtle);">
+            <div style="display:flex; align-items:center; gap:0.75rem; margin-bottom:1rem;">
+              <div style="width:44px; height:44px; border-radius:50%; background:linear-gradient(135deg, #7C3AED, #A855F7); display:flex; align-items:center; justify-content:center; color:white; font-weight:800; font-size:1.1rem;">P</div>
+              <div>
+                <div style="font-weight:700; font-size:0.95rem; color:var(--text-dark);">Priya Desai</div>
+                <div style="color:#F59E0B; font-size:0.85rem;">⭐⭐⭐⭐⭐</div>
+              </div>
+            </div>
+            <p style="color:var(--text-muted); font-size:0.9rem; line-height:1.7;">"Got matching hoodies for our college fest and everyone went crazy! The fabric quality is premium and the team was super helpful with the design. 10/10 recommend! 💜"</p>
+            <div style="margin-top:1rem; font-size:0.8rem; color:var(--text-muted);">Verified Buyer • Thane</div>
+          </div>
+
+          <!-- Review 3 -->
+          <div style="background:white; border-radius:20px; padding:2rem; box-shadow:0 4px 20px rgba(0,0,0,0.05); border:1px solid var(--border-subtle);">
+            <div style="display:flex; align-items:center; gap:0.75rem; margin-bottom:1rem;">
+              <div style="width:44px; height:44px; border-radius:50%; background:linear-gradient(135deg, #059669, #34D399); display:flex; align-items:center; justify-content:center; color:white; font-weight:800; font-size:1.1rem;">A</div>
+              <div>
+                <div style="font-weight:700; font-size:0.95rem; color:var(--text-dark);">Arjun Patil</div>
+                <div style="color:#F59E0B; font-size:0.85rem;">⭐⭐⭐⭐⭐</div>
+              </div>
+            </div>
+            <p style="color:var(--text-muted); font-size:0.9rem; line-height:1.7;">"The meme collection is hilarious! Got 'Overthinking' tee and the quality is chef's kiss. Fast delivery and amazing packaging. DARBO knows their game 🙌"</p>
+            <div style="margin-top:1rem; font-size:0.8rem; color:var(--text-muted);">Verified Buyer • Mumbai</div>
+          </div>
+
+          <!-- Review 4 -->
+          <div style="background:white; border-radius:20px; padding:2rem; box-shadow:0 4px 20px rgba(0,0,0,0.05); border:1px solid var(--border-subtle);">
+            <div style="display:flex; align-items:center; gap:0.75rem; margin-bottom:1rem;">
+              <div style="width:44px; height:44px; border-radius:50%; background:linear-gradient(135deg, #2563EB, #60A5FA); display:flex; align-items:center; justify-content:center; color:white; font-weight:800; font-size:1.1rem;">S</div>
+              <div>
+                <div style="font-weight:700; font-size:0.95rem; color:var(--text-dark);">Sneha Kulkarni</div>
+                <div style="color:#F59E0B; font-size:0.85rem;">⭐⭐⭐⭐⭐</div>
+              </div>
+            </div>
+            <p style="color:var(--text-muted); font-size:0.9rem; line-height:1.7;">"Ordered for my boyfriend's birthday — a custom tee with our inside joke. He LOVED it! The printing is so professional. Will definitely order again! 🎁"</p>
+            <div style="margin-top:1rem; font-size:0.8rem; color:var(--text-muted);">Verified Buyer • Pune</div>
+          </div>
+
+          <!-- Review 5 -->
+          <div style="background:white; border-radius:20px; padding:2rem; box-shadow:0 4px 20px rgba(0,0,0,0.05); border:1px solid var(--border-subtle);">
+            <div style="display:flex; align-items:center; gap:0.75rem; margin-bottom:1rem;">
+              <div style="width:44px; height:44px; border-radius:50%; background:linear-gradient(135deg, #DC2626, #F87171); display:flex; align-items:center; justify-content:center; color:white; font-weight:800; font-size:1.1rem;">V</div>
+              <div>
+                <div style="font-weight:700; font-size:0.95rem; color:var(--text-dark);">Vikram Joshi</div>
+                <div style="color:#F59E0B; font-size:0.85rem;">⭐⭐⭐⭐⭐</div>
+              </div>
+            </div>
+            <p style="color:var(--text-muted); font-size:0.9rem; line-height:1.7;">"Been ordering from DARBO for 6 months now. Their 'Good Vibes Only' tee is my fav. Fabric is super comfortable and the fit is exactly as the size guide says. 💪"</p>
+            <div style="margin-top:1rem; font-size:0.8rem; color:var(--text-muted);">Verified Buyer • Borivali</div>
+          </div>
+
+          <!-- Review 6 -->
+          <div style="background:white; border-radius:20px; padding:2rem; box-shadow:0 4px 20px rgba(0,0,0,0.05); border:1px solid var(--border-subtle);">
+            <div style="display:flex; align-items:center; gap:0.75rem; margin-bottom:1rem;">
+              <div style="width:44px; height:44px; border-radius:50%; background:linear-gradient(135deg, #D97706, #FBBF24); display:flex; align-items:center; justify-content:center; color:white; font-weight:800; font-size:1.1rem;">M</div>
+              <div>
+                <div style="font-weight:700; font-size:0.95rem; color:var(--text-dark);">Meera Nair</div>
+                <div style="color:#F59E0B; font-size:0.85rem;">⭐⭐⭐⭐⭐</div>
+              </div>
+            </div>
+            <p style="color:var(--text-muted); font-size:0.9rem; line-height:1.7;">"Got bulk order for our company event — 30 custom tees with our logo. Delivered on time, perfect print, great price. DARBO is our go-to now! 🏢✨"</p>
+            <div style="margin-top:1rem; font-size:0.8rem; color:var(--text-muted);">Verified Buyer • Andheri</div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- STANDALONE CONTACT US SECTION -->
+  <section id="contactSection" class="contact-section" style="padding: 5rem 0; background: #ffffff;">
+    <div class="container">
+      
+      <div class="animate-on-scroll" style="text-align:center; margin-bottom:3rem;">
+        <span style="font-family:var(--font-heading); font-weight:800; font-size:0.85rem; letter-spacing:0.2em; color:var(--coral-primary); text-transform:uppercase;">Get In Touch</span>
+        <h2 style="font-family:var(--font-heading); font-weight:900; font-size:2.6rem; color:var(--text-dark); margin-top:0.4rem;">
+          We’d Love to <span style="color:var(--coral-primary);">Hear From You</span>
+        </h2>
+        <p style="color:var(--text-muted); font-size:1rem; max-width:550px; margin:0.8rem auto 0; line-height:1.6;">
+          Have questions about your custom order, bulk printing, or sizing? Reach out to us directly through any channel below!
+        </p>
+      </div>
+
+      <!-- Contact Info Cards Grid -->
+      <div class="animate-on-scroll" style="display:grid; grid-template-columns:repeat(4, 1fr); gap:1.5rem; margin-bottom:3rem;">
+        
+        <!-- Phone Card (Direct Phone Keypad + Copy) -->
+        <div style="background:linear-gradient(135deg, #FFF5F4, #FFFFFF); padding:2rem 1.5rem; border-radius:20px; text-align:center; border:1px solid var(--border-subtle); transition:all 0.3s ease; box-shadow:0 4px 15px rgba(0,0,0,0.03); display:flex; flex-direction:column; justify-content:space-between;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+          <div>
+            <div style="width:50px; height:50px; background:var(--coral-light); border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 1rem; color:var(--coral-primary);">
+              <i data-lucide="phone" style="width:24px; height:24px;"></i>
+            </div>
+            <h4 style="font-family:var(--font-heading); font-weight:800; font-size:1.1rem; color:var(--text-dark); margin-bottom:0.4rem;">Call Us Directly</h4>
+            <a href="tel:+918355983699" style="color:var(--coral-primary); font-weight:900; font-size:1.1rem; text-decoration:none; display:inline-block; margin-bottom:0.3rem;" title="Tap to open phone dialer">
+              +91 8355983699
+            </a>
+            <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:1rem;">Mon-Sat, 10 AM - 8 PM IST</p>
+          </div>
+          
+          <div style="display:flex; gap:0.5rem; justify-content:center;">
+            <a href="tel:+918355983699" class="btn-primary-pill" style="padding:0.4rem 0.8rem; font-size:0.78rem; text-decoration:none;" title="Open Phone Keypad">
+              📞 Call Dialer
+            </a>
+            <button onclick="copyToClipboard('+918355983699', 'Phone Number')" style="padding:0.4rem 0.8rem; border-radius:999px; border:1px solid var(--border-subtle); background:white; font-size:0.78rem; font-weight:700; cursor:pointer; color:var(--text-dark);" title="Copy Phone Number">
+              📋 Copy
+            </button>
+          </div>
+        </div>
+
+        <!-- WhatsApp Card (Direct WhatsApp Redirect + Copy) -->
+        <div style="background:linear-gradient(135deg, #F0FDF4, #FFFFFF); padding:2rem 1.5rem; border-radius:20px; text-align:center; border:1px solid #DCFCE7; transition:all 0.3s ease; box-shadow:0 4px 15px rgba(0,0,0,0.03); display:flex; flex-direction:column; justify-content:space-between;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+          <div>
+            <div style="width:50px; height:50px; background:#DCFCE7; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 1rem; color:#16A34A;">
+              <i data-lucide="message-circle" style="width:24px; height:24px;"></i>
+            </div>
+            <h4 style="font-family:var(--font-heading); font-weight:800; font-size:1.1rem; color:var(--text-dark); margin-bottom:0.4rem;">WhatsApp Chat</h4>
+            <a href="https://wa.me/918355983699?text=Hi%20DARBO!%20I%20want%20to%20inquire%20about%20your%20custom%20printed%20streetwear." target="_blank" style="color:#16A34A; font-weight:900; font-size:1.1rem; text-decoration:none; display:inline-block; margin-bottom:0.3rem;" title="Tap to redirect to WhatsApp">
+              +91 8355983699
+            </a>
+            <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:1rem;">Instant Chat & Order Updates</p>
+          </div>
+
+          <div style="display:flex; gap:0.5rem; justify-content:center;">
+            <a href="https://wa.me/918355983699?text=Hi%20DARBO!%20I%20want%20to%20inquire%20about%20your%20custom%20printed%20streetwear." target="_blank" style="padding:0.4rem 0.8rem; border-radius:999px; background:#16A34A; color:white; font-size:0.78rem; font-weight:700; text-decoration:none;" title="Open WhatsApp App">
+              💬 Chat WhatsApp
+            </a>
+            <button onclick="copyToClipboard('+918355983699', 'WhatsApp Number')" style="padding:0.4rem 0.8rem; border-radius:999px; border:1px solid #DCFCE7; background:white; font-size:0.78rem; font-weight:700; cursor:pointer; color:var(--text-dark);" title="Copy WhatsApp Number">
+              📋 Copy
+            </button>
+          </div>
+        </div>
+
+        <!-- Email Card (Direct Mailto / Gmail Web Compose + Copy) -->
+        <div style="background:linear-gradient(135deg, #EFF6FF, #FFFFFF); padding:2rem 1.5rem; border-radius:20px; text-align:center; border:1px solid #DBEAFE; transition:all 0.3s ease; box-shadow:0 4px 15px rgba(0,0,0,0.03); display:flex; flex-direction:column; justify-content:space-between;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+          <div>
+            <div style="width:50px; height:50px; background:#DBEAFE; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 1rem; color:#2563EB;">
+              <i data-lucide="mail" style="width:24px; height:24px;"></i>
+            </div>
+            <h4 style="font-family:var(--font-heading); font-weight:800; font-size:1.1rem; color:var(--text-dark); margin-bottom:0.4rem;">Email Us</h4>
+            <a href="mailto:darbooffice@gmail.com?subject=Inquiry%20for%20DARBO%20Streetwear&body=Hi%20DARBO%20Team,%0A%0AI%20would%20like%20to%20inquire%20about..." style="color:#2563EB; font-weight:900; font-size:0.92rem; text-decoration:none; display:inline-block; margin-bottom:0.3rem; word-break:break-all;" title="Tap to compose email">
+              darbooffice@gmail.com
+            </a>
+            <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:1rem;">Pre-filled Direct Mail / Gmail</p>
+          </div>
+
+          <div style="display:flex; flex-direction:column; gap:0.4rem;">
+            <div style="display:flex; gap:0.4rem; justify-content:center;">
+              <a href="mailto:darbooffice@gmail.com?subject=Inquiry%20for%20DARBO%20Streetwear&body=Hi%20DARBO%20Team,%0A%0AI%20would%20like%20to%20inquire%20about..." style="padding:0.4rem 0.7rem; border-radius:999px; background:#2563EB; color:white; font-size:0.75rem; font-weight:700; text-decoration:none;" title="Open Mail App">
+                ✉️ Mail App
+              </a>
+              <button onclick="openGmailCompose('darbooffice@gmail.com', 'Inquiry for DARBO Streetwear', 'Hi DARBO Team,\n\nI would like to inquire about your custom printed collection.')" style="padding:0.4rem 0.7rem; border-radius:999px; background:#EA4335; color:white; border:none; font-size:0.75rem; font-weight:700; cursor:pointer;" title="Open Direct Gmail Web Compose">
+                🚀 Gmail Web
+              </button>
+            </div>
+            <button onclick="copyToClipboard('darbooffice@gmail.com', 'Email Address')" style="padding:0.35rem 0.8rem; border-radius:999px; border:1px solid #DBEAFE; background:white; font-size:0.75rem; font-weight:700; cursor:pointer; color:var(--text-dark); width:100%;" title="Copy Email Address">
+              📋 Copy Email
+            </button>
+          </div>
+        </div>
+
+        <!-- Store Location Card (Google Maps Direct Navigation) -->
+        <div style="background:linear-gradient(135deg, #FAF5FF, #FFFFFF); padding:2rem 1.5rem; border-radius:20px; text-align:center; border:1px solid #F3E8FF; transition:all 0.3s ease; box-shadow:0 4px 15px rgba(0,0,0,0.03); display:flex; flex-direction:column; justify-content:space-between;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+          <div>
+            <div style="width:50px; height:50px; background:#F3E8FF; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 1rem; color:#9333EA;">
+              <i data-lucide="map-pin" style="width:24px; height:24px;"></i>
+            </div>
+            <h4 style="font-family:var(--font-heading); font-weight:800; font-size:1.1rem; color:var(--text-dark); margin-bottom:0.4rem;">Visit HQ Studio</h4>
+            <p style="color:#9333EA; font-weight:800; font-size:0.9rem; margin-bottom:0.3rem;">Borivali West, Mumbai</p>
+            <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:1rem;">Shanti Ashram Rd (Pincode: 400103)</p>
+          </div>
+
+          <div style="display:flex; gap:0.5rem; justify-content:center;">
+            <a href="https://www.google.com/maps/search/?api=1&query=Shop+No+.1+Link+Bird+CHSL+2,+Shanti+Ashram+Rd,+Devki+Nagar,+Borivali+West+Mumbai,+Maharashtra+400103" target="_blank" style="padding:0.4rem 0.8rem; border-radius:999px; background:#9333EA; color:white; font-size:0.78rem; font-weight:700; text-decoration:none;" title="Open in Google Maps">
+              🗺️ Open Maps
+            </a>
+            <button onclick="copyToClipboard('Shop No. 1 Link Bird CHSL 2, Shanti Ashram Rd, Devki Nagar, Borivali West, Mumbai, Maharashtra 400103', 'Full Address')" style="padding:0.4rem 0.8rem; border-radius:999px; border:1px solid #F3E8FF; background:white; font-size:0.78rem; font-weight:700; cursor:pointer; color:var(--text-dark);" title="Copy Address">
+              📋 Copy
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- STORE LOCATOR & LIVE DELIVERY MAP SECTION ("Find DARBO Hubs & Live Track") -->
+  <section id="stores" class="stores-section">
+    <div class="container">
+      
+      <!-- SECTION HEADER -->
+      <div class="section-header-flex animate-on-scroll">
+        <div>
+          <span class="section-eyebrow">HEAD OFFICE & FLAGSHIP STUDIO</span>
+          <h2 class="section-title">
+            Visit <span class="text-coral">DARBO</span> Store.
+          </h2>
+          <p class="section-subtitle">
+            Visit our Head Office & Flagship Studio at Shanti Ashram, Borivali West, Mumbai for custom printed streetwear and instant pickups.
+          </p>
+        </div>
+
+        <div class="map-quick-search-box">
+          <div class="map-search-input-wrapper">
+            <i data-lucide="map-pin" class="map-search-icon"></i>
+            <input type="text" id="mapSearchInput" placeholder="Enter Pincode or City (e.g. 400050, Mumbai, Delhi...)" oninput="handleMapSearch(event)" />
+            <button class="map-search-btn" onclick="triggerMapSearch()">Search</button>
+          </div>
+          <div id="mapSearchResultMsg" class="map-search-msg"></div>
+        </div>
+      </div>
+
+      <!-- MAP CONTROLS & TAB FILTERS -->
+      <div class="map-controls-bar animate-on-scroll">
+        <div class="map-filter-tabs">
+          <button class="map-tab active" onclick="filterMapMarkers('all', this)">📍 All Hubs (5)</button>
+          <button class="map-tab" onclick="filterMapMarkers('flagship', this)">🏬 Flagship Stores</button>
+          <button class="map-tab" onclick="filterMapMarkers('custom', this)">🎨 Experience Studios</button>
+          <button class="map-tab" onclick="filterMapMarkers('express', this)">🚀 Express Hubs</button>
+        </div>
+
+        <button class="track-order-map-btn" onclick="openLiveTrackingModal()">
+          🚚 Track Live Delivery
+        </button>
+      </div>
+
+      <!-- MAP & CARDS MAIN GRID -->
+      <div class="map-main-grid animate-on-scroll delay-1">
+        
+        <!-- LEFT INTERACTIVE MAP CONTAINER -->
+        <div class="map-container-wrapper">
+          <div id="darboMap" class="darbo-map-instance"></div>
+          
+          <!-- MAP OVERLAY CONTROLS -->
+          <div class="map-overlay-badge">
+            <span class="pulse-dot"></span>
+            <span>Live Hub Status: <strong>5 Active Stores & Hubs</strong></span>
+          </div>
+
+          <div class="map-theme-toggle">
+            <button class="map-tile-btn active" onclick="switchMapTile('voyager', this)">Light Map</button>
+            <button class="map-tile-btn" onclick="switchMapTile('dark', this)">Dark Map</button>
+          </div>
+        </div>
+
+        <!-- RIGHT STORE LISTING CARDS -->
+        <div class="store-cards-list" id="storeCardsList">
+          <!-- Dynamic Stores Render via JS -->
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- NEWSLETTER SECTION ("Stay in the loop") -->
+  <section class="newsletter-section">
+    <div class="container">
+      <div class="newsletter-card animate-on-scroll">
+        
+        <div class="newsletter-left">
+          <div class="envelope-badge">
+            <i data-lucide="mail"></i>
+          </div>
+          <div class="newsletter-text">
+            <h4>Stay in the loop</h4>
+            <p>Be the first to know about new drops, exclusive offers & special events.</p>
+          </div>
+        </div>
+
+        <form class="newsletter-form" onsubmit="handleSubscribe(event)">
+          <input type="email" id="newsletterEmail" class="newsletter-input" placeholder="Enter your email" required />
+          <button type="submit" class="btn-subscribe">Subscribe</button>
+        </form>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer id="contact" class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        
+        <!-- COL 1: BRAND -->
+        <div class="footer-brand">
+          <a href="#home" class="nav-logo" title="DARBO — Own Your Story">
+            <img src="images/logo.png" alt="DARBO — Own Your Story" class="footer-logo-img" />
+          </a>
+          <p>Trendy prints, custom outfits and memorable moments – printed for you, made by you.</p>
+          <div class="social-icons">
+            <a href="#" class="social-icon-btn"><i data-lucide="instagram" style="width:16px;height:16px;"></i></a>
+            <a href="#" class="social-icon-btn"><i data-lucide="facebook" style="width:16px;height:16px;"></i></a>
+            <a href="#" class="social-icon-btn"><i data-lucide="twitter" style="width:16px;height:16px;"></i></a>
+          </div>
+        </div>
+
+        <!-- COL 2: SHOP -->
+        <div class="footer-col">
+          <h5>SHOP</h5>
+          <ul class="footer-links">
+            <li><a href="#bestsellers">All Products</a></li>
+            <li><a href="#bestsellers">T-Shirts</a></li>
+            <li><a href="#bestsellers">Hoodies</a></li>
+            <li><a href="#bestsellers">Oversized Tees</a></li>
+            <li><a href="#bestsellers">Accessories</a></li>
+          </ul>
+        </div>
+
+        <!-- COL 3: COMPANY -->
+        <div class="footer-col">
+          <h5>COMPANY</h5>
+          <ul class="footer-links">
+            <li><a href="#">About Us</a></li>
+            <li><a href="#stores">Store Locator</a></li>
+            <li><a href="javascript:void(0)" onclick="openSizeGuide()">Size Guide</a></li>
+            <li><a href="#">FAQs</a></li>
+            <li><a href="#">Contact Us</a></li>
+          </ul>
+        </div>
+
+        <!-- COL 4: CUSTOMER CARE -->
+        <div class="footer-col">
+          <h5>CUSTOMER CARE</h5>
+          <ul class="footer-links">
+            <li><a href="javascript:void(0)" onclick="openLiveTrackingModal()">Track Order</a></li>
+            <li><a href="#">Shipping & Returns</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms & Conditions</a></li>
+          </ul>
+        </div>
+
+        <!-- COL 5: CONTACT & HQ ADDRESS -->
+        <div class="footer-col" id="contactInfo">
+          <h5>OFFICE & HQ ADDRESS</h5>
+          <div class="contact-info">
+            <a href="https://www.google.com/maps/search/?api=1&query=Shop+No+.1+Link+Bird+CHSL+2,+Shanti+Ashram+Rd,+Devki+Nagar,+Borivali+West+Mumbai,+Maharashtra+400103" target="_blank" style="display:flex; align-items:flex-start; gap:0.6rem; color:inherit; text-decoration:none;" title="Open in Google Maps">
+              <i data-lucide="map-pin" style="width:16px;height:16px;color:var(--coral-primary);flex-shrink:0;margin-top:4px;"></i>
+              <span>Shop No. 1 Link Bird CHSL 2, Shanti Ashram Rd, Devki Nagar, Borivali West, Mumbai, Maharashtra 400103</span>
+            </a>
+            <a href="tel:+918355983699" style="display:flex; align-items:center; gap:0.6rem; color:inherit; text-decoration:none;" title="Call Us Directly">
+              <i data-lucide="phone" style="width:16px;height:16px;color:var(--coral-primary);flex-shrink:0;"></i>
+              <span>+91 8355983699</span>
+            </a>
+            <a href="https://wa.me/918355983699?text=Hi%20DARBO!%20I%20have%20a%20query." target="_blank" style="display:flex; align-items:center; gap:0.6rem; color:#25D366; font-weight:700; text-decoration:none;" title="Chat on WhatsApp">
+              <i data-lucide="message-circle" style="width:16px;height:16px;color:#25D366;flex-shrink:0;"></i>
+              <span>WhatsApp: +91 8355983699</span>
+            </a>
+            <a href="mailto:darbooffice@gmail.com" style="display:flex; align-items:center; gap:0.6rem; color:inherit; text-decoration:none;" title="Send Direct Email to DARBO">
+              <i data-lucide="mail" style="width:16px;height:16px;color:var(--coral-primary);flex-shrink:0;"></i>
+              <span>darbooffice@gmail.com</span>
+            </a>
+            <div style="display:flex; align-items:center; gap:0.6rem;">
+              <i data-lucide="clock" style="width:16px;height:16px;color:var(--coral-primary);flex-shrink:0;"></i>
+              <span>Mon - Sat: 10:00 AM - 8:00 PM IST</span>
+            </div>
+          </div>
+          <a href="https://wa.me/918355983699?text=Hi%20DARBO!%20I%20want%20to%20place%20an%20order." target="_blank" class="btn-whatsapp-footer">
+            <span>💬 Chat on WhatsApp (+91 8355983699)</span>
+          </a>
+        </div>
+
+      </div>
+
+      <div class="footer-bottom">
+        © 2024 DARBO. All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+  <!-- CART DRAWER -->
+  <div class="drawer-overlay" id="cartDrawerOverlay" onclick="if(event.target===this)toggleCart()">
+    <div class="cart-drawer">
+      <div class="cart-header">
+        <h3>Shopping Bag</h3>
+        <button class="close-btn" onclick="toggleCart()">✕</button>
+      </div>
+
+      <!-- FREE SHIPPING PROGRESS BAR -->
+      <div style="padding: 1rem 1.5rem 0;">
+        <div class="free-shipping-bar" id="shippingMeter">
+          <!-- Rendered via JS -->
+        </div>
+      </div>
+
+      <div class="cart-body" id="cartBody">
+        <!-- Cart Items Dynamic Render -->
+      </div>
+      <div class="cart-footer">
+        <div class="coupon-box">
+          <input type="text" id="couponInput" class="coupon-input" placeholder="Promo code (e.g. DARBO10)" />
+          <button class="btn-apply-coupon" onclick="applyCoupon()">Apply</button>
+        </div>
+        <div class="cart-subtotal">
+          <span>Subtotal</span>
+          <span id="cartSubtotal">₹1,398</span>
+        </div>
+        <button class="btn-checkout" onclick="proceedToCheckout()">Checkout Now →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUICK VIEW MODAL -->
+  <div class="modal-overlay" id="quickViewModal" onclick="if(event.target===this)closeQuickView()">
+    <div class="modal-card">
+      <button class="modal-close-btn" onclick="closeQuickView()">✕</button>
+      <div id="quickViewContent"></div>
+    </div>
+  </div>
+
+  <!-- LIVE SEARCH MODAL -->
+  <div class="modal-overlay" id="searchModal" onclick="if(event.target===this)closeSearchModal()">
+    <div class="modal-card" style="max-width: 600px;">
+      <button class="modal-close-btn" onclick="closeSearchModal()">✕</button>
+      <h3 style="font-family:var(--font-heading); font-weight:800; font-size:1.4rem; margin-bottom:1rem;">Search Products</h3>
+      <input type="text" oninput="handleSearchInput(event)" placeholder="Search T-shirts, hoodies, meme prints..." style="width:100%; padding:0.85rem 1.25rem; border:1px solid var(--border-light); border-radius:var(--radius-pill); font-size:0.95rem; outline:none; margin-bottom:1.25rem;" />
+      <div id="searchResults"></div>
+    </div>
+  </div>
+
+  <!-- LIVE ORDER TRACKING MODAL -->
+  <div class="modal-overlay" id="liveTrackingModal" onclick="if(event.target===this)closeLiveTrackingModal()">
+    <div class="modal-card" style="max-width: 650px;">
+      <button class="modal-close-btn" onclick="closeLiveTrackingModal()">✕</button>
+      <span class="section-eyebrow">LIVE DELIVERY SIMULATOR</span>
+      <h3 style="font-family:var(--font-heading); font-weight:900; font-size:1.6rem; margin-bottom:0.4rem;">Track Your DARBO Outfit</h3>
+      <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1.25rem;">Enter your Order ID to track real-time delivery rider movement on the map.</p>
+      
+      <div style="display:flex; gap:0.5rem; margin-bottom:1.25rem;">
+        <input type="text" id="trackOrderIdInput" value="DARBO-8842" placeholder="Enter Order ID (e.g. DARBO-8842)" style="flex:1; padding:0.75rem 1rem; border:1px solid var(--border-light); border-radius:var(--radius-pill); font-size:0.9rem; outline:none;" />
+        <button class="btn-primary-pill" onclick="startLiveTrackSim()" style="padding:0.75rem 1.4rem;">Track Live 🚀</button>
+      </div>
+
+      <!-- TRACKING STATUS BADGE -->
+      <div id="trackingStatusCard" class="tracking-status-card">
+        <div class="tracking-status-header">
+          <div>
+            <div style="font-size:0.75rem; color:var(--text-muted); font-weight:700;">ORDER STATUS</div>
+            <div style="font-family:var(--font-heading); font-weight:800; font-size:1.1rem; color:var(--coral-primary);" id="trackDisplayId">#DARBO-8842 (Out For Delivery)</div>
+          </div>
+          <div class="eta-pill" id="trackEta">EST. DELIVERY: 18 MINS</div>
+        </div>
+
+        <div class="tracking-progress-bar">
+          <div class="progress-step active"><span>1</span> Printed</div>
+          <div class="progress-step active"><span>2</span> Quality Pass</div>
+          <div class="progress-step active"><span>3</span> On The Way</div>
+          <div class="progress-step"><span>4</span> Delivered</div>
+        </div>
+
+        <!-- TRACKING MAP MINI PREVIEW -->
+        <div id="trackMiniMap" style="height: 220px; border-radius: var(--radius-md); overflow: hidden; margin-top: 1rem; border: 1px solid var(--border-light);"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHECKOUT SIMULATOR MODAL -->
+  <div class="modal-overlay" id="checkoutModal" onclick="if(event.target===this)closeCheckoutModal()">
+    <div class="modal-card" style="max-width: 500px;">
+      <button class="modal-close-btn" onclick="closeCheckoutModal()">✕</button>
+      <div style="display:flex; align-items:center; gap:0.75rem; margin-bottom:0.75rem;">
+        <img src="images/logo.png" alt="DARBO Logo" style="height:36px; width:auto; object-fit:contain;" />
+      </div>
+      <h3 style="font-family:var(--font-heading); font-weight:800; font-size:1.4rem; margin-bottom:0.5rem;">Fast Checkout</h3>
+      <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1.5rem;">Enter shipping details to place your order with Free Express Delivery.</p>
+      
+      <form onsubmit="completeOrder(event)">
+        <div style="display:flex; flex-direction:column; gap:0.85rem; margin-bottom:1.5rem;">
+          <input type="text" placeholder="Full Name" required style="padding:0.75rem 1rem; border:1px solid var(--border-light); border-radius:12px; font-size:0.9rem;" />
+          <input type="tel" placeholder="Phone Number" required style="padding:0.75rem 1rem; border:1px solid var(--border-light); border-radius:12px; font-size:0.9rem;" />
+          <input type="text" placeholder="Shipping Address (City, Pincode)" required style="padding:0.75rem 1rem; border:1px solid var(--border-light); border-radius:12px; font-size:0.9rem;" />
+          <select style="padding:0.75rem 1rem; border:1px solid var(--border-light); border-radius:12px; font-size:0.9rem; background:#fff;">
+            <option>UPI / GPay / PhonePe</option>
+            <option>Cash on Delivery (COD)</option>
+            <option>Credit / Debit Card</option>
+          </select>
+        </div>
+        <button type="submit" class="btn-primary-pill" style="width:100%; justify-content:center;">Complete Order 🚀</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- FLOATING WHATSAPP SUPPORT BUTTON -->
+  <div class="whatsapp-float-container">
+    <div class="whatsapp-tooltip">Chat with us on WhatsApp 💬</div>
+    <a href="https://wa.me/918355983699?text=Hi%20DARBO!%20I%20have%20a%20query%20about%20your%20printed%20collection%20%2F%20custom%20outfit." target="_blank" class="whatsapp-float-btn" aria-label="Chat on WhatsApp">
+      <svg class="whatsapp-icon-svg" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M16 0C7.163 0 0 7.163 0 16C0 19.516 1.139 22.766 3.084 25.408L1.055 31.428L7.26 29.434C9.805 31.246 12.879 32 16 32C24.837 32 32 24.837 32 16C32 7.163 24.837 0 16 0ZM24.84 22.428C24.475 23.456 23.018 24.321 21.905 24.563C21.144 24.726 20.158 24.855 16.828 23.473C12.569 21.706 9.822 17.378 9.61 17.095C9.406 16.812 7.942 14.869 7.942 12.861C7.942 10.853 8.966 9.873 9.373 9.456C9.78 9.039 10.26 8.943 10.537 8.943C10.814 8.943 11.091 8.947 11.33 8.959C11.587 8.972 11.95 8.861 12.28 9.652C12.619 10.466 13.447 12.493 13.545 12.697C13.643 12.901 13.733 13.178 13.595 13.455C13.457 13.732 13.35 13.916 13.147 14.153C12.944 14.39 12.723 14.686 12.545 14.871C12.348 15.075 12.133 15.297 12.37 15.704C12.607 16.111 13.424 17.443 14.633 18.52C16.187 19.904 17.45 20.347 17.857 20.551C18.264 20.755 18.504 20.718 18.741 20.441C18.978 20.164 19.756 19.255 20.033 18.848C20.31 18.441 20.587 18.497 20.952 18.635C21.317 18.773 23.27 19.734 23.677 19.938C24.084 20.142 24.355 20.24 24.453 20.407C24.551 20.574 24.551 21.4 24.84 22.428Z" fill="white"/>
+      </svg>
+      <span class="whatsapp-badge-pulse"></span>
+    </a>
+  </div>
+
+  <!-- SIZE GUIDE MODAL -->
+  <div class="modal-overlay" id="sizeGuideModal" onclick="if(event.target===this) closeSizeGuide()">
+    <div class="modal-content" style="max-width: 680px; position:relative; background:white; padding:2rem; border-radius:12px; margin:2rem auto;">
+      <button class="modal-close-btn" onclick="closeSizeGuide()">✕</button>
+      <h3 style="font-family:var(--font-heading); font-weight:900; font-size:1.6rem; margin-bottom:1rem;">📏 DARBO Size Guide</h3>
+      <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:1.5rem;">All measurements are in inches. For the best fit, measure a garment that fits you well and compare.</p>
+      <div style="overflow-x:auto;">
+        <table style="width:100%; border-collapse:collapse; font-size:0.9rem;">
+          <thead>
+            <tr style="background:var(--coral-light); font-weight:700;">
+              <th style="padding:0.75rem 1rem; text-align:left; border-radius:8px 0 0 0;">Size</th>
+              <th style="padding:0.75rem 1rem; text-align:center;">Chest</th>
+              <th style="padding:0.75rem 1rem; text-align:center;">Length</th>
+              <th style="padding:0.75rem 1rem; text-align:center;">Shoulder</th>
+              <th style="padding:0.75rem 1rem; text-align:center; border-radius:0 8px 0 0;">Sleeve</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom:1px solid var(--border-subtle);"><td style="padding:0.75rem 1rem; font-weight:700;">S</td><td style="padding:0.75rem 1rem; text-align:center;">38"</td><td style="padding:0.75rem 1rem; text-align:center;">27"</td><td style="padding:0.75rem 1rem; text-align:center;">17"</td><td style="padding:0.75rem 1rem; text-align:center;">8"</td></tr>
+            <tr style="border-bottom:1px solid var(--border-subtle); background:#fafafa;"><td style="padding:0.75rem 1rem; font-weight:700;">M</td><td style="padding:0.75rem 1rem; text-align:center;">40"</td><td style="padding:0.75rem 1rem; text-align:center;">28"</td><td style="padding:0.75rem 1rem; text-align:center;">18"</td><td style="padding:0.75rem 1rem; text-align:center;">8.5"</td></tr>
+            <tr style="border-bottom:1px solid var(--border-subtle);"><td style="padding:0.75rem 1rem; font-weight:700;">L</td><td style="padding:0.75rem 1rem; text-align:center;">42"</td><td style="padding:0.75rem 1rem; text-align:center;">29"</td><td style="padding:0.75rem 1rem; text-align:center;">19"</td><td style="padding:0.75rem 1rem; text-align:center;">9"</td></tr>
+            <tr style="border-bottom:1px solid var(--border-subtle); background:#fafafa;"><td style="padding:0.75rem 1rem; font-weight:700;">XL</td><td style="padding:0.75rem 1rem; text-align:center;">44"</td><td style="padding:0.75rem 1rem; text-align:center;">30"</td><td style="padding:0.75rem 1rem; text-align:center;">20"</td><td style="padding:0.75rem 1rem; text-align:center;">9.5"</td></tr>
+            <tr><td style="padding:0.75rem 1rem; font-weight:700;">XXL</td><td style="padding:0.75rem 1rem; text-align:center;">46"</td><td style="padding:0.75rem 1rem; text-align:center;">31"</td><td style="padding:0.75rem 1rem; text-align:center;">21"</td><td style="padding:0.75rem 1rem; text-align:center;">10"</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="margin-top:1.5rem; padding:1rem; background:var(--coral-light); border-radius:12px; font-size:0.85rem; color:var(--text-muted);">
+        💡 <strong>Pro Tip:</strong> DARBO oversized tees run 1-2 sizes larger than standard fit. If you prefer a snug look, size down. For the classic streetwear drape, go true to size.
+      </div>
+    </div>
+  </div>
+
+  <!-- Back to Top Button -->
+  <button class="back-to-top" id="backToTopBtn" onclick="scrollToTop()" aria-label="Back to top">
+    <i data-lucide="arrow-up" style="width:20px;height:20px;"></i>
+  </button>
+
+  <!-- Leaflet Maps JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <!-- JS Scripts -->
+  <script src="js/main.js"></script>
+  <script>
+    // Initialize Lucide Icons
+    lucide.createIcons();
+  </script>
+</body>
+</html>

@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard — DARBO Store Management</title>
+  <meta name="description" content="DARBO Store Admin Panel - Manage catalog, categories, pricing, descriptions, and product photos with full CRUD support." />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="images/logo.png" />
+
+  <!-- CSS Stylesheets -->
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/animations.css" />
+
+  <!-- Lucide Icons via CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+  
+  const firebaseConfig = {
+    projectId: "364426200825",
+    authDomain: "364426200825.firebaseapp.com",
+    storageBucket: "364426200825.appspot.com"
+  };
+  
+  try {
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    
+    onAuthStateChanged(auth, (user) => {
+      const gate = document.getElementById('adminAuthGate');
+      const dashboard = document.getElementById('adminDashboard');
+      const userName = document.getElementById('adminUserName');
+      
+      if (user) {
+        if (gate) gate.style.display = 'none';
+        if (dashboard) dashboard.style.display = 'block';
+        if (userName) userName.textContent = user.displayName || user.email || 'Admin';
+      } else {
+        if (gate) gate.style.display = 'flex';
+        if (dashboard) dashboard.style.display = 'none';
+      }
+    });
+  } catch(e) {
+    console.warn('Firebase admin init:', e);
+    // In case Firebase fails, show dashboard anyway for local dev
+    const dashboard = document.getElementById('adminDashboard');
+    if (dashboard) dashboard.style.display = 'block';
+    const gate = document.getElementById('adminAuthGate');
+    if (gate) gate.style.display = 'none';
+  }
+  </script>
+
+  <!-- Admin Panel Custom Styles -->
+  <style>
+    :root {
+      --admin-bg: #F8FAFC;
+      --admin-sidebar-bg: #1E293B;
+      --admin-card-bg: #FFFFFF;
+      --admin-border: #E2E8F0;
+      --admin-text-main: #0F172A;
+      --admin-text-sub: #64748B;
+    }
+
+    .admin-toast-container { position:fixed; top:1.5rem; right:1.5rem; z-index:9999; display:flex; flex-direction:column; gap:0.5rem; }
+    .admin-toast { background:#1E293B; color:white; padding:0.85rem 1.5rem; border-radius:12px; font-size:0.9rem; font-weight:600; box-shadow:0 8px 30px rgba(0,0,0,0.15); animation:slideInRight 0.3s ease; display:flex; align-items:center; gap:0.5rem; }
+    .admin-toast.success { border-left:4px solid #22C55E; }
+    .admin-toast.error { border-left:4px solid #EF4444; }
+    .admin-toast.info { border-left:4px solid #3B82F6; }
+    @keyframes slideInRight { from { transform:translateX(100%); opacity:0; } to { transform:translateX(0); opacity:1; } }
+
+    body.admin-body {
+      background-color: var(--admin-bg);
+      color: var(--admin-text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .admin-navbar {
+      background-color: var(--admin-sidebar-bg);
+      color: #FFFFFF;
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .admin-logo-flex {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .admin-logo-flex img {
+      height: 38px;
+      width: auto;
+    }
+
+    .admin-badge {
+      background: rgba(240, 113, 103, 0.2);
+      color: var(--coral-primary);
+      border: 1px solid var(--coral-primary);
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 0.25rem 0.65rem;
+      border-radius: var(--radius-pill);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .admin-nav-right {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+    }
+
+    .btn-view-store {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(255,255,255,0.1);
+      color: #FFFFFF;
+      padding: 0.55rem 1.1rem;
+      border-radius: var(--radius-pill);
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 0.85rem;
+      text-decoration: none;
+      transition: all var(--transition-fast);
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .btn-view-store:hover {
+      background-color: var(--coral-primary);
+      border-color: var(--coral-primary);
+    }
+
+    .admin-container {
+      max-width: 1400px;
+      margin: 2rem auto;
+      padding: 0 1.5rem;
+      width: 100%;
+      flex: 1;
+    }
+
+    /* STATS CARDS GRID */
+    .admin-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-card {
+      background: var(--admin-card-bg);
+      padding: 1.5rem;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--admin-border);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: transform var(--transition-fast);
+    }
+
+    .stat-card:hover {
+      transform: translateY(-3px);
+    }
+
+    .stat-value {
+      font-family: var(--font-heading);
+      font-size: 2rem;
+      font-weight: 900;
+      color: var(--admin-text-main);
+      margin-top: 0.25rem;
+    }
+
+    .stat-label {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--admin-text-sub);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .stat-icon-box {
+      width: 52px;
+      height: 52px;
+      border-radius: 16px;
+      background: rgba(240, 113, 103, 0.1);
+      color: var(--coral-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* TOOLBAR & CONTROLS */
+    .admin-toolbar {
+      background: var(--admin-card-bg);
+      padding: 1.25rem 1.5rem;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--admin-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .admin-search-wrapper {
+      position: relative;
+      flex: 1;
+      min-width: 260px;
+    }
+
+    .admin-search-input {
+      width: 100%;
+      padding: 0.75rem 1rem 0.75rem 2.8rem;
+      border: 1px solid var(--admin-border);
+      border-radius: var(--radius-pill);
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color var(--transition-fast);
+    }
+
+    .admin-search-input:focus {
+      border-color: var(--coral-primary);
+    }
+
+    .admin-search-icon {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--admin-text-sub);
+    }
+
+    .toolbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .btn-add-product {
+      background-color: var(--coral-primary);
+      color: #FFFFFF;
+      padding: 0.75rem 1.4rem;
+      border-radius: var(--radius-pill);
+      font-family: var(--font-heading);
+      font-weight: 800;
+      font-size: 0.9rem;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      box-shadow: 0 4px 15px rgba(240, 113, 103, 0.3);
+      transition: all var(--transition-fast);
+    }
+
+    .btn-add-product:hover {
+      background-color: var(--coral-hover);
+      transform: translateY(-2px);
+    }
+
+    /* CATALOG TABLE */
+    .admin-table-card {
+      background: var(--admin-card-bg);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--admin-border);
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+    }
+
+    .admin-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    .admin-table th {
+      background-color: #F1F5F9;
+      color: var(--admin-text-sub);
+      font-family: var(--font-heading);
+      font-weight: 800;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid var(--admin-border);
+    }
+
+    .admin-table td {
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid var(--admin-border);
+      vertical-align: middle;
+      font-size: 0.9rem;
+    }
+
+    .admin-table tr:hover {
+      background-color: #F8FAFC;
+    }
+
+    .product-thumb {
+      width: 54px;
+      height: 54px;
+      border-radius: var(--radius-md);
+      object-fit: cover;
+      border: 1px solid var(--admin-border);
+    }
+
+    .badge-category {
+      background-color: #E2E8F0;
+      color: #334155;
+      font-weight: 700;
+      font-size: 0.75rem;
+      padding: 0.25rem 0.65rem;
+      border-radius: var(--radius-pill);
+    }
+
+    .badge-stock-in {
+      background-color: #DCFCE7;
+      color: #15803D;
+      font-weight: 800;
+      font-size: 0.75rem;
+      padding: 0.25rem 0.65rem;
+      border-radius: var(--radius-pill);
+    }
+
+    .badge-stock-out {
+      background-color: #FEE2E2;
+      color: #B91C1C;
+      font-weight: 800;
+      font-size: 0.75rem;
+      padding: 0.25rem 0.65rem;
+      border-radius: var(--radius-pill);
+    }
+
+    .action-btn-group {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-action-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1px solid var(--admin-border);
+      background-color: #FFFFFF;
+      color: var(--admin-text-main);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+
+    .btn-action-icon.edit:hover {
+      background-color: #3B82F6;
+      color: #FFFFFF;
+      border-color: #3B82F6;
+    }
+
+    .btn-action-icon.delete:hover {
+      background-color: #EF4444;
+      color: #FFFFFF;
+      border-color: #EF4444;
+    }
+
+    /* MODALS DESIGN */
+    .admin-form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .full-width-form {
+      grid-column: 1 / -1;
+    }
+
+    .image-preview-box {
+      width: 100%;
+      height: 160px;
+      border: 2px dashed var(--admin-border);
+      border-radius: var(--radius-md);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+      background: #F8FAFC;
+    }
+
+    .image-preview-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    @media (max-width: 768px) {
+      .admin-table th:nth-child(4),
+      .admin-table td:nth-child(4),
+      .admin-table th:nth-child(5),
+      .admin-table td:nth-child(5) {
+        display: none;
+      }
+      .admin-form-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body class="admin-body">
+
+  <div id="adminAuthGate" style="display:flex; align-items:center; justify-content:center; min-height:100vh; background:linear-gradient(135deg, #1E293B 0%, #334155 100%); width: 100%;">
+    <div style="text-align:center; padding:3rem; background:white; border-radius:20px; box-shadow:0 25px 50px rgba(0,0,0,0.3); max-width:420px; width:90%;">
+      <img src="images/logo.png" alt="DARBO" style="width:80px; margin-bottom:1.5rem;" />
+      <h2 style="font-family:'Outfit',sans-serif; font-weight:900; font-size:1.6rem; margin-bottom:0.5rem; color:#1E293B;">Admin Access Required</h2>
+      <p style="color:#64748B; font-size:0.9rem; margin-bottom:2rem;">Please sign in with your DARBO admin account to access the dashboard.</p>
+      <a href="login.html" style="display:inline-block; padding:0.85rem 2.5rem; background:linear-gradient(135deg, #F07167, #E25A50); color:white; border-radius:999px; text-decoration:none; font-weight:700; font-size:0.95rem; transition:transform 0.2s;">Sign In to Continue →</a>
+    </div>
+  </div>
+
+  <div id="adminDashboard" style="display:none; width: 100%; height: 100%; min-height: 100vh;">
+  <!-- ADMIN NAVBAR -->
+  <header class="admin-navbar">
+    <div class="admin-logo-flex">
+      <img src="images/logo.png" alt="DARBO Logo" />
+      <span class="admin-badge">ADMIN DASHBOARD</span>
+      <span id="adminUserName" style="color:#94A3B8; font-size:0.85rem; font-weight:500;"></span>
+    </div>
+
+    <div class="admin-nav-right">
+      <a href="index.html" target="_blank" class="btn-view-store">
+        <i data-lucide="external-link" style="width:16px;height:16px;"></i> View Live Store
+      </a>
+    </div>
+  </header>
+
+  <!-- MAIN ADMIN CONTENT -->
+  <main class="admin-container">
+    
+    <!-- STATS OVERVIEW -->
+    <div class="admin-stats-grid">
+      <div class="stat-card">
+        <div>
+          <div class="stat-label">Total Catalog Products</div>
+          <div class="stat-value" id="statTotalProducts">0</div>
+        </div>
+        <div class="stat-icon-box">
+          <i data-lucide="shopping-bag" style="width:26px;height:26px;"></i>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div>
+          <div class="stat-label">Categories Count</div>
+          <div class="stat-value" id="statTotalCategories">0</div>
+        </div>
+        <div class="stat-icon-box" style="background: rgba(59, 130, 246, 0.1); color:#3B82F6;">
+          <i data-lucide="layers" style="width:26px;height:26px;"></i>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div>
+          <div class="stat-label">In Stock Items</div>
+          <div class="stat-value" id="statInStockCount" style="color:#10B981;">0</div>
+        </div>
+        <div class="stat-icon-box" style="background: rgba(16, 185, 129, 0.1); color:#10B981;">
+          <i data-lucide="check-circle" style="width:26px;height:26px;"></i>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div>
+          <div class="stat-label">Avg. Product Price</div>
+          <div class="stat-value" id="statAvgPrice">₹0</div>
+        </div>
+        <div class="stat-icon-box" style="background: rgba(168, 85, 247, 0.1); color:#A855F7;">
+          <i data-lucide="tag" style="width:26px;height:26px;"></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- TOOLBAR CONTROLS -->
+    <div class="admin-toolbar">
+      <div class="admin-search-wrapper">
+        <i data-lucide="search" class="admin-search-icon" style="width:18px;height:18px;"></i>
+        <input type="text" id="adminSearchInput" oninput="handleAdminSearch(event)" class="admin-search-input" placeholder="Search catalog by title, category, price..." />
+      </div>
+
+      <div class="toolbar-actions">
+        <select id="adminCategoryFilter" onchange="filterAdminTable()" style="padding:0.75rem 1rem; border:1px solid var(--admin-border); border-radius:var(--radius-pill); font-size:0.88rem; outline:none; background:#fff; font-weight:700;">
+          <option value="all">All Categories</option>
+          <option value="T-Shirts">T-Shirts</option>
+          <option value="Hoodies">Hoodies</option>
+          <option value="Custom Outfits">Custom Outfits</option>
+          <option value="Meme Prints">Meme Prints</option>
+        </select>
+
+        <button class="btn-add-product" onclick="openAddProductModal()">
+          <i data-lucide="plus" style="width:18px;height:18px;"></i> Add Product
+        </button>
+      </div>
+    </div>
+
+    <!-- PRODUCTS MANAGEMENT TABLE -->
+    <div class="admin-table-card">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Image</th>
+            <th>Product Title</th>
+            <th>Category</th>
+            <th>Price</th>
+            <th>Stock Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="adminProductsTableBody">
+          <!-- Dynamic Render via Admin JS -->
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ORDER MANAGEMENT SECTION -->
+    <div class="admin-table-card" style="margin-top:2rem;">
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:1.5rem;">
+        <h2 style="font-weight:800; font-size:1.4rem; color:#1E293B;">📦 Order Management</h2>
+        <span style="background:#F1F5F9; padding:0.4rem 1rem; border-radius:999px; font-size:0.85rem; font-weight:600; color:#64748B;" id="orderCountBadge">0 Orders</span>
+      </div>
+      <div style="overflow-x:auto;">
+        <table class="admin-catalog-table admin-table" style="width:100%;">
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>Date</th>
+              <th>Outfit</th>
+              <th>Size</th>
+              <th>Total</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="ordersTableBody">
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ADD / EDIT PRODUCT MODAL -->
+  <div class="modal-overlay" id="productFormModal" onclick="if(event.target===this)closeProductModal()">
+    <div class="modal-card" style="max-width: 680px;">
+      <button class="modal-close-btn" onclick="closeProductModal()">✕</button>
+      <h3 style="font-family:var(--font-heading); font-weight:900; font-size:1.5rem; margin-bottom:0.3rem;" id="modalFormTitle">Add New Product</h3>
+      <p style="font-size:0.85rem; color:var(--admin-text-sub); margin-bottom:1.5rem;">Upload photo, set title, category, price, and details for your DARBO catalog.</p>
+
+      <form id="productForm" onsubmit="saveProductSubmit(event)">
+        <input type="hidden" id="editProductId" value="" />
+
+        <div class="admin-form-grid">
+          
+          <div class="form-group full-width-form">
+            <label class="form-label" for="prodTitle">Product Title *</label>
+            <input type="text" id="prodTitle" class="form-input" placeholder="e.g. Anime Cyberpunk Oversized Tee" required />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="prodCategory">Category *</label>
+            <select id="prodCategory" class="form-input" required>
+              <option value="T-Shirts">T-Shirts</option>
+              <option value="Hoodies">Hoodies</option>
+              <option value="Custom Outfits">Custom Outfits</option>
+              <option value="Meme Prints">Meme Prints</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="prodPrice">Selling Price (₹) *</label>
+            <input type="number" id="prodPrice" class="form-input" placeholder="699" min="1" required />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="prodMRP">Original MRP (₹)</label>
+            <input type="number" id="prodMRP" class="form-input" placeholder="1299" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="prodStock">Stock Quantity *</label>
+            <input type="number" id="prodStock" class="form-input" placeholder="50" min="0" value="25" required />
+          </div>
+
+          <div class="form-group full-width-form">
+            <label class="form-label" for="prodImage">Product Image (File Upload or Image URL) *</label>
+            <input type="file" id="prodFileInput" accept="image/*" onchange="handleImageFileSelect(event)" style="margin-bottom:0.5rem; font-size:0.85rem;" />
+            <input type="text" id="prodImageUrl" class="form-input" placeholder="OR paste image URL (e.g. images/chill_mode_tee.jpg)" oninput="updateImagePreview(this.value)" />
+            
+            <div class="image-preview-box" style="margin-top:0.75rem;">
+              <img id="imgPreview" src="" alt="Preview" style="display:none;" />
+              <div id="previewPlaceholder" style="font-size:0.82rem; color:var(--admin-text-sub);">Image Preview Box</div>
+            </div>
+          </div>
+
+          <div class="form-group full-width-form">
+            <label class="form-label" for="prodDescription">Description & Fabric Specs</label>
+            <textarea id="prodDescription" class="form-input" rows="3" placeholder="Heavyweight 240 GSM 100% French Terry Cotton. High-density graphic print." style="border-radius:12px; resize:vertical;"></textarea>
+          </div>
+
+        </div>
+
+        <div style="display:flex; gap:0.75rem; margin-top:1.5rem; justify-content:flex-end;">
+          <button type="button" class="btn-whatsapp-footer" style="background:#E2E8F0; color:#334155; box-shadow:none; margin-top:0;" onclick="closeProductModal()">Cancel</button>
+          <button type="submit" class="btn-primary-pill" style="padding:0.75rem 1.6rem;">Save Product 💾</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- DELETE CONFIRMATION MODAL -->
+  <div class="modal-overlay" id="deleteConfirmModal" onclick="if(event.target===this)closeDeleteModal()">
+    <div class="modal-card" style="max-width: 440px; text-align:center;">
+      <button class="modal-close-btn" onclick="closeDeleteModal()">✕</button>
+      <div style="width:60px; height:60px; border-radius:50%; background:#FEE2E2; color:#EF4444; display:flex; align-items:center; justify-content:center; margin:0 auto 1rem;">
+        <i data-lucide="trash-2" style="width:30px;height:30px;"></i>
+      </div>
+      <h3 style="font-family:var(--font-heading); font-weight:900; font-size:1.3rem; margin-bottom:0.5rem;">Delete Product?</h3>
+      <p style="font-size:0.88rem; color:var(--admin-text-sub); margin-bottom:1.5rem;" id="deleteConfirmText">Are you sure you want to remove this item from the catalog?</p>
+      
+      <div style="display:flex; gap:0.75rem; justify-content:center;">
+        <button class="btn-whatsapp-footer" style="background:#E2E8F0; color:#334155; box-shadow:none; margin-top:0;" onclick="closeDeleteModal()">Cancel</button>
+        <button class="btn-primary-pill" style="background-color:#EF4444; padding:0.75rem 1.4rem;" onclick="confirmDeleteProduct()">Delete Product</button>
+      </div>
+    </div>
+  </div>
+
+  </div> <!-- End of adminDashboard -->
+
+  <!-- JS Scripts -->
+  <script src="js/main.js"></script>
+  <script src="js/admin.js"></script>
+  <script>
+    lucide.createIcons();
+  </script>
+</body>
+</html>

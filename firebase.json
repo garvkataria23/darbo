@@ -1,0 +1,27 @@
+{
+  "auth": {
+    "providers": {
+      "emailPassword": true,
+      "phone": true,
+      "googleSignIn": {
+        "oAuthBrandDisplayName": "DARBO — Own Your Story",
+        "supportEmail": "darbooffice@gmail.com",
+        "authorizedRedirectUris": [
+          "http://localhost:8080",
+          "http://localhost"
+        ]
+      }
+    }
+  },
+  "firestore": {
+    "rules": "firestore.rules"
+  },
+  "hosting": {
+    "public": ".",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ]
+  }
+}

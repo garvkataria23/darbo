@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 160" fill="none">
+  <!-- D Letter -->
+  <path d="M10 30 h20 q55 0 55 50 q0 50 -55 50 h-20 z" fill="#F07167" rx="8"/>
+  <path d="M25 52 h8 q25 0 25 28 q0 28 -25 28 h-8 z" fill="white"/>
+
+  <!-- Hanger Hook (the "A" replacement) -->
+  <path d="M175 8 q0 -8 8 -8 q8 0 8 8 l0 10" stroke="#F07167" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <!-- Hanger Triangle -->
+  <path d="M148 45 L183 18 L218 45 Z" fill="#F07167" stroke="#F07167" stroke-width="4" stroke-linejoin="round"/>
+  <!-- T-shirt shape cut out from hanger -->
+  <path d="M163 32 L173 25 Q176 30 183 30 Q190 30 193 25 L203 32 L198 42 L193 40 L193 55 h-20 L173 40 L168 42 Z" fill="white"/>
+  <!-- Hanger bar -->
+  <rect x="143" y="43" width="80" height="6" rx="3" fill="#F07167"/>
+  
+  <!-- A legs (extending from hanger) -->
+  <path d="M148 45 L130 130 h25 l5 -25 h50 l5 25 h25 L218 45" fill="#F07167"/>
+  <!-- A cutout (inner triangle hole) -->
+  <path d="M172 85 h22 l-5 -18 h-12 z" fill="white"/>
+
+  <!-- R Letter -->
+  <path d="M240 30 h40 q35 0 35 30 q0 25 -20 30 l28 40 h-28 l-25 -38 h-5 v38 h-25 z" fill="#F07167"/>
+  <path d="M265 52 h12 q12 0 12 10 q0 10 -12 10 h-12 z" fill="white"/>
+
+  <!-- B Letter -->
+  <path d="M340 30 h38 q30 0 30 24 q0 16 -14 22 q18 5 18 24 q0 30 -34 30 h-38 z" fill="#F07167"/>
+  <path d="M365 50 h10 q10 0 10 8 q0 10 -10 10 h-10 z" fill="white"/>
+  <path d="M365 84 h12 q12 0 12 10 q0 12 -12 12 h-12 z" fill="white"/>
+
+  <!-- O Letter -->
+  <path d="M455 80 q0 -52 -35 -52 q-35 0 -35 52 q0 52 35 52 q35 0 35 -52 z" fill="#F07167"/>
+  <path d="M443 80 q0 -38 -23 -38 q-23 0 -23 38 q0 38 23 38 q23 0 23 -38 z" fill="white"/>
+
+  <!-- Tagline decorative lines -->
+  <line x1="120" y1="148" x2="155" y2="148" stroke="#F07167" stroke-width="3" stroke-linecap="round"/>
+  <line x1="310" y1="148" x2="345" y2="148" stroke="#F07167" stroke-width="3" stroke-linecap="round"/>
+  
+  <!-- OWN YOUR STORY text -->
+  <text x="250" y="153" text-anchor="middle" font-family="'Outfit','Helvetica Neue',sans-serif" font-weight="700" font-size="16" letter-spacing="5" fill="#1a1a1a">OWN YOUR STORY</text>
+</svg>
