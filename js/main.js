@@ -644,19 +644,8 @@ function setPresetText(preset) {
 }
 
 function addCustomTeeToCart() {
-  const customText = document.getElementById('customTextInput')?.value || 'CUSTOM DESIGN';
-  cart.push({
-    id: Date.now(),
-    title: `Custom Printed Tee ("${customText}")`,
-    price: 799,
-    color: 'Blush Pink',
-    size: 'L',
-    qty: 1,
-    image: 'images/custom_tee_mockup.jpg'
-  });
-  updateCartUI();
-  showToast('Your custom designed shirt was added to cart! 🛍️');
-  toggleCart();
+  // Redirect to the full customizer studio
+  window.location.href = 'customize.html';
 }
 
 function selectStudioColor(colorHex) {
@@ -1079,5 +1068,16 @@ function fallbackCopyText(text, label) {
 function openGmailCompose(email = 'darbooffice@gmail.com', subject = 'Inquiry for DARBO', body = 'Hi DARBO Team,\n\nI would like to inquire about...') {
   const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(email)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   window.open(gmailUrl, '_blank');
+}
+
+/* Navigate to full checkout page with Razorpay */
+function goToCheckout() {
+  if (cart.length === 0) {
+    showToast('Your cart is empty!');
+    return;
+  }
+  /* Save current cart to localStorage so checkout.html can read it */
+  localStorage.setItem('darbo_cart', JSON.stringify(cart));
+  window.location.href = 'checkout.html';
 }
 

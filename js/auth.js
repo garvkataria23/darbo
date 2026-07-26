@@ -1,23 +1,23 @@
 /* ==========================================================================
    DARBO — FIREBASE AUTHENTICATION & FIRESTORE DATABASE MODULE
-   Project ID: 364426200825
+   Project: darbo-e0752 | App ID: 1:364426200825:web:f3bd7401b87313ed840428
    Skills Used: firebase-basics, firebase-auth-basics, firebase-firestore
    ========================================================================== */
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { 
-  getAuth, 
-  signInWithPopup, 
-  GoogleAuthProvider, 
-  signInWithEmailAndPassword, 
-  createUserWithEmailAndPassword, 
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+import {
+  getAuth,
+  signInWithPopup,
+  GoogleAuthProvider,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
   sendPasswordResetEmail,
   updateProfile,
   RecaptchaVerifier,
   signInWithPhoneNumber,
   onAuthStateChanged,
   signOut
-} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+} from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
 
 import {
   getFirestore,
@@ -27,13 +27,17 @@ import {
   collection,
   addDoc,
   serverTimestamp
-} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+} from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 
-// 1. FIREBASE CONFIGURATION (Project: 364426200825)
+// 1. FIREBASE CONFIGURATION (Project: darbo-e0752)
 const firebaseConfig = {
-  projectId: "364426200825",
-  authDomain: "364426200825.firebaseapp.com",
-  storageBucket: "364426200825.appspot.com"
+  apiKey: "AIzaSyDKpbjjw_NQeKS2C4eil9pSg16ZGfFmzTo",
+  authDomain: "darbo-e0752.firebaseapp.com",
+  projectId: "darbo-e0752",
+  storageBucket: "darbo-e0752.firebasestorage.app",
+  messagingSenderId: "364426200825",
+  appId: "1:364426200825:web:f3bd7401b87313ed840428",
+  measurementId: "G-1VNFQZVLK7"
 };
 
 // Initialize Firebase App, Auth, & Firestore
@@ -44,10 +48,13 @@ try {
   auth = getAuth(app);
   db = getFirestore(app);
   googleProvider = new GoogleAuthProvider();
-  console.log("🔥 Firebase Auth & Firestore initialized for Project 364426200825!");
+  console.log("🔥 Firebase Auth & Firestore initialized for Project darbo-e0752!");
 } catch (err) {
   console.warn("Firebase Init Note: ", err.message);
 }
+
+// Export app for firestore.js module import
+export { app };
 
 // 2. FIRESTORE DATABASE HELPER: Save/Update User Profile
 async function saveUserProfileToFirestore(user, extraData = {}) {

@@ -1,0 +1,360 @@
+/* =======================================================================
+   DARBO — Festivals & Events Page Styles
+   Ganesh Chaturthi | Independence Day | Raksha Bandhan | Onam
+   ======================================================================= */
+
+/* Festival Page Base */
+.festivals-page {
+  background: var(--bg-offwhite);
+  min-height: 100vh;
+}
+
+/* Page Header */
+.festivals-hero {
+  position: relative;
+  padding: 6rem 1.5rem 3rem;
+  text-align: center;
+  background: linear-gradient(135deg, var(--coral-primary), #FF8A65, #FF7043);
+  color: #fff;
+  overflow: hidden;
+}
+.festivals-hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -25%;
+  width: 150%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 60%);
+  animation: heroGlow 8s ease-in-out infinite alternate;
+}
+@keyframes heroGlow {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(5%, 3%); }
+}
+.festivals-hero h1 {
+  font-family: var(--font-heading);
+  font-weight: 900;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  position: relative;
+  z-index: 1;
+}
+.festivals-hero p {
+  font-size: 1.05rem;
+  opacity: 0.9;
+  margin-top: 0.75rem;
+  position: relative;
+  z-index: 1;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Festival Section */
+.festival-section {
+  padding: 4rem 0;
+  border-bottom: 1px solid var(--border-light);
+}
+.festival-section:last-of-type {
+  border-bottom: none;
+}
+
+/* Festival Hero Banner */
+.festival-banner {
+  position: relative;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  padding: 3rem 2.5rem;
+  margin-bottom: 2.5rem;
+  min-height: 280px;
+  display: flex;
+  align-items: center;
+}
+.festival-banner .banner-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+.festival-banner .banner-content {
+  position: relative;
+  z-index: 2;
+  max-width: 550px;
+}
+.festival-banner .festival-eyebrow {
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  margin-bottom: 0.75rem;
+  opacity: 0.85;
+}
+.festival-banner .festival-name {
+  font-family: var(--font-heading);
+  font-weight: 900;
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  line-height: 1.1;
+  margin-bottom: 0.75rem;
+}
+.festival-banner .festival-tagline {
+  font-size: 1rem;
+  opacity: 0.9;
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+
+/* Countdown Timer */
+.countdown-container {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+.countdown-box {
+  background: rgba(255,255,255,0.2);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: var(--radius-sm);
+  padding: 0.75rem 1rem;
+  min-width: 70px;
+  text-align: center;
+}
+.countdown-box .number {
+  font-family: var(--font-heading);
+  font-weight: 900;
+  font-size: 1.8rem;
+  line-height: 1;
+}
+.countdown-box .label {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  opacity: 0.8;
+  margin-top: 0.25rem;
+}
+
+/* Festival CTA Button */
+.festival-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.85rem 2rem;
+  background: #fff;
+  color: var(--text-dark);
+  border: none;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  text-decoration: none;
+}
+.festival-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+/* Festival Product Grid */
+.festival-products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1.25rem;
+  margin-top: 1.5rem;
+}
+.festival-product-card {
+  background: var(--bg-white);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-light);
+  overflow: hidden;
+  transition: all var(--transition-normal);
+  cursor: pointer;
+}
+.festival-product-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+.festival-product-card .product-img-wrap {
+  position: relative;
+  width: 100%;
+  padding-top: 110%;
+  overflow: hidden;
+}
+.festival-product-card .product-img-wrap img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--transition-normal);
+}
+.festival-product-card:hover .product-img-wrap img {
+  transform: scale(1.05);
+}
+.festival-product-card .festival-badge {
+  position: absolute;
+  top: 0.75rem;
+  left: 0.75rem;
+  padding: 0.3rem 0.75rem;
+  border-radius: var(--radius-pill);
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  z-index: 2;
+}
+.festival-product-card .product-info {
+  padding: 1rem;
+}
+.festival-product-card .product-title {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 0.95rem;
+  margin-bottom: 0.35rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.festival-product-card .product-price {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 1.1rem;
+  color: var(--coral-primary);
+}
+.festival-product-card .product-price .original {
+  text-decoration: line-through;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  font-weight: 400;
+  margin-left: 0.5rem;
+}
+.festival-product-card .add-to-cart-btn {
+  width: 100%;
+  padding: 0.65rem;
+  margin-top: 0.75rem;
+  background: var(--coral-primary);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-pill);
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+.festival-product-card .add-to-cart-btn:hover {
+  background: var(--coral-hover);
+}
+
+/* Festival-specific color themes */
+/* Ganesh Chaturthi — Orange & Gold */
+.festival-ganesh .banner-bg {
+  background: linear-gradient(135deg, #FF6F00, #FF8F00, #FFA000);
+}
+.festival-ganesh .countdown-box {
+  background: rgba(255,255,255,0.2);
+  border-color: rgba(255,255,255,0.4);
+}
+.festival-ganesh .festival-badge { background: #FF6F00; color: #fff; }
+
+/* Independence Day — Tricolor */
+.festival-independence .banner-bg {
+  background: linear-gradient(180deg, #FF9933 0%, #FFFFFF 45%, #138808 100%);
+}
+.festival-independence .banner-content { color: #1a1a1a; }
+.festival-independence .countdown-box {
+  background: rgba(0,0,0,0.15);
+  color: #1a1a1a;
+  border-color: rgba(0,0,0,0.2);
+}
+.festival-independence .festival-cta { background: #138808; color: #fff; }
+.festival-independence .festival-cta:hover { background: #0e6b06; }
+.festival-independence .festival-badge { background: #FF9933; color: #fff; }
+
+/* Raksha Bandhan — Pink & Purple */
+.festival-raksha .banner-bg {
+  background: linear-gradient(135deg, #E91E63, #9C27B0, #AB47BC);
+}
+.festival-raksha .festival-badge { background: #E91E63; color: #fff; }
+
+/* Onam — Gold & Green */
+.festival-onam .banner-bg {
+  background: linear-gradient(135deg, #FF8F00, #2E7D32, #43A047);
+}
+.festival-onam .festival-badge { background: #2E7D32; color: #fff; }
+
+/* Navigation bar on events page */
+.events-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--bg-white);
+  border-top: 1px solid var(--border-light);
+  padding: 0.75rem 1rem;
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  z-index: 100;
+  box-shadow: 0 -4px 20px rgba(0,0,0,0.05);
+}
+.events-nav a {
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-pill);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+.events-nav a:hover,
+.events-nav a.active {
+  background: var(--coral-primary);
+  color: #fff;
+}
+
+/* Smooth scroll anchor offset */
+.festival-section[id] {
+  scroll-margin-top: 80px;
+}
+
+/* Reveal animation */
+.festival-reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.festival-reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .festivals-hero {
+    padding: 5rem 1rem 2rem;
+  }
+  .festival-banner {
+    padding: 2rem 1.5rem;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+  }
+  .countdown-container {
+    justify-content: center;
+  }
+  .festival-products-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+  .events-nav {
+    gap: 0.25rem;
+    padding: 0.5rem;
+  }
+  .events-nav a {
+    padding: 0.4rem 0.6rem;
+    font-size: 0.7rem;
+  }
+}
+@media (max-width: 480px) {
+  .festival-products-grid {
+    grid-template-columns: 1fr;
+  }
+}

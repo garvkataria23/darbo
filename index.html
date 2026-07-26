@@ -59,6 +59,7 @@
         <li><a href="#bestsellers" class="nav-link">Shop</a></li>
         <li><a href="#collections" class="nav-link">Collections</a></li>
         <li><a href="#customizer" class="nav-link">Custom Outfit</a></li>
+        <li><a href="events.html" class="nav-link">Events 🎉</a></li>
         <li><a href="#about" class="nav-link">About Us</a></li>
         <li><a href="#contactSection" class="nav-link">Contact</a></li>
       </ul>
@@ -99,6 +100,7 @@
           <li><a href="#bestsellers" class="mobile-nav-link" onclick="closeMobileNav()">Shop All</a></li>
           <li><a href="#collections" class="mobile-nav-link" onclick="closeMobileNav()">Collections</a></li>
           <li><a href="#customizer" class="mobile-nav-link" onclick="closeMobileNav()">Custom Outfit Studio</a></li>
+          <li><a href="events.html" class="mobile-nav-link" onclick="closeMobileNav()">Festival Collection 🎉</a></li>
           <li><a href="#about" class="mobile-nav-link" onclick="closeMobileNav()">About Us</a></li>
           <li><a href="#contact" class="mobile-nav-link" onclick="closeMobileNav()">Contact Us</a></li>
         </ul>
@@ -285,6 +287,17 @@
           </div>
         </div>
 
+        <!-- CARD 5: FESTIVAL COLLECTION -->
+        <div class="collection-card" onclick="window.location.href='events.html'" style="cursor:pointer;">
+          <img src="images/event_specials.jpg" alt="Festival Collection" loading="lazy" />
+          <div class="collection-card-overlay" style="background:linear-gradient(135deg, rgba(255,107,0,0.7), rgba(233,30,99,0.7));">
+            <div class="collection-pill-btn">
+              <span>🎉 Festival Collection</span>
+              <span class="collection-arrow">➔</span>
+            </div>
+          </div>
+        </div>
+
       </div>
 
     </div>
@@ -341,6 +354,11 @@
           <button class="btn-primary-pill" onclick="addCustomTeeToCart()">
             Add Custom Shirt to Bag
             <span class="btn-arrow-icon">➔</span>
+          </button>
+
+          <button class="btn-primary-pill" onclick="openBulkOrderModal()" style="margin-top:0.75rem; background:var(--text-dark); width:100%; justify-content:center;">
+            📦 Bulk Custom Order (10+ pieces)
+            <span class="btn-arrow-icon">💬</span>
           </button>
         </div>
 
@@ -574,10 +592,10 @@
           <h2 style="font-family:var(--font-heading); font-weight:900; font-size:2.2rem; color:var(--text-dark); margin-top:0.5rem;">Loved By 120+ Streetwear Enthusiasts ❤️</h2>
         </div>
 
-        <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:1.5rem;">
+        <div class="reviews-grid" style="display:grid; grid-template-columns:repeat(3, 1fr); gap:1.5rem;">
           
           <!-- Review 1 -->
-          <div style="background:white; border-radius:20px; padding:2rem; box-shadow:0 4px 20px rgba(0,0,0,0.05); border:1px solid var(--border-subtle);">
+          <div class="review-card" style="background:white; border-radius:20px; padding:2rem; box-shadow:0 4px 20px rgba(0,0,0,0.05); border:1px solid var(--border-subtle);">
             <div style="display:flex; align-items:center; gap:0.75rem; margin-bottom:1rem;">
               <div style="width:44px; height:44px; border-radius:50%; background:linear-gradient(135deg, var(--coral-primary), #FF8A80); display:flex; align-items:center; justify-content:center; color:white; font-weight:800; font-size:1.1rem;">R</div>
               <div>
@@ -590,7 +608,7 @@
           </div>
 
           <!-- Review 2 -->
-          <div style="background:white; border-radius:20px; padding:2rem; box-shadow:0 4px 20px rgba(0,0,0,0.05); border:1px solid var(--border-subtle);">
+          <div class="review-card" style="background:white; border-radius:20px; padding:2rem; box-shadow:0 4px 20px rgba(0,0,0,0.05); border:1px solid var(--border-subtle);">
             <div style="display:flex; align-items:center; gap:0.75rem; margin-bottom:1rem;">
               <div style="width:44px; height:44px; border-radius:50%; background:linear-gradient(135deg, #7C3AED, #A855F7); display:flex; align-items:center; justify-content:center; color:white; font-weight:800; font-size:1.1rem;">P</div>
               <div>
@@ -603,7 +621,7 @@
           </div>
 
           <!-- Review 3 -->
-          <div style="background:white; border-radius:20px; padding:2rem; box-shadow:0 4px 20px rgba(0,0,0,0.05); border:1px solid var(--border-subtle);">
+          <div class="review-card" style="background:white; border-radius:20px; padding:2rem; box-shadow:0 4px 20px rgba(0,0,0,0.05); border:1px solid var(--border-subtle);">
             <div style="display:flex; align-items:center; gap:0.75rem; margin-bottom:1rem;">
               <div style="width:44px; height:44px; border-radius:50%; background:linear-gradient(135deg, #059669, #34D399); display:flex; align-items:center; justify-content:center; color:white; font-weight:800; font-size:1.1rem;">A</div>
               <div>
@@ -616,7 +634,7 @@
           </div>
 
           <!-- Review 4 -->
-          <div style="background:white; border-radius:20px; padding:2rem; box-shadow:0 4px 20px rgba(0,0,0,0.05); border:1px solid var(--border-subtle);">
+          <div class="review-card" style="background:white; border-radius:20px; padding:2rem; box-shadow:0 4px 20px rgba(0,0,0,0.05); border:1px solid var(--border-subtle);">
             <div style="display:flex; align-items:center; gap:0.75rem; margin-bottom:1rem;">
               <div style="width:44px; height:44px; border-radius:50%; background:linear-gradient(135deg, #2563EB, #60A5FA); display:flex; align-items:center; justify-content:center; color:white; font-weight:800; font-size:1.1rem;">S</div>
               <div>
@@ -629,7 +647,7 @@
           </div>
 
           <!-- Review 5 -->
-          <div style="background:white; border-radius:20px; padding:2rem; box-shadow:0 4px 20px rgba(0,0,0,0.05); border:1px solid var(--border-subtle);">
+          <div class="review-card" style="background:white; border-radius:20px; padding:2rem; box-shadow:0 4px 20px rgba(0,0,0,0.05); border:1px solid var(--border-subtle);">
             <div style="display:flex; align-items:center; gap:0.75rem; margin-bottom:1rem;">
               <div style="width:44px; height:44px; border-radius:50%; background:linear-gradient(135deg, #DC2626, #F87171); display:flex; align-items:center; justify-content:center; color:white; font-weight:800; font-size:1.1rem;">V</div>
               <div>
@@ -642,7 +660,7 @@
           </div>
 
           <!-- Review 6 -->
-          <div style="background:white; border-radius:20px; padding:2rem; box-shadow:0 4px 20px rgba(0,0,0,0.05); border:1px solid var(--border-subtle);">
+          <div class="review-card" style="background:white; border-radius:20px; padding:2rem; box-shadow:0 4px 20px rgba(0,0,0,0.05); border:1px solid var(--border-subtle);">
             <div style="display:flex; align-items:center; gap:0.75rem; margin-bottom:1rem;">
               <div style="width:44px; height:44px; border-radius:50%; background:linear-gradient(135deg, #D97706, #FBBF24); display:flex; align-items:center; justify-content:center; color:white; font-weight:800; font-size:1.1rem;">M</div>
               <div>
@@ -988,7 +1006,7 @@
           <span>Subtotal</span>
           <span id="cartSubtotal">₹1,398</span>
         </div>
-        <button class="btn-checkout" onclick="proceedToCheckout()">Checkout Now →</button>
+        <button class="btn-checkout" onclick="goToCheckout()">Checkout Now →</button>
       </div>
     </div>
   </div>
@@ -1015,13 +1033,13 @@
   <div class="modal-overlay" id="liveTrackingModal" onclick="if(event.target===this)closeLiveTrackingModal()">
     <div class="modal-card" style="max-width: 650px;">
       <button class="modal-close-btn" onclick="closeLiveTrackingModal()">✕</button>
-      <span class="section-eyebrow">LIVE DELIVERY SIMULATOR</span>
+      <span class="section-eyebrow">LIVE ORDER TRACKING</span>
       <h3 style="font-family:var(--font-heading); font-weight:900; font-size:1.6rem; margin-bottom:0.4rem;">Track Your DARBO Outfit</h3>
-      <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1.25rem;">Enter your Order ID to track real-time delivery rider movement on the map.</p>
+      <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1.25rem;">Enter your Order ID to track real-time delivery status with live courier updates.</p>
       
       <div style="display:flex; gap:0.5rem; margin-bottom:1.25rem;">
         <input type="text" id="trackOrderIdInput" value="DARBO-8842" placeholder="Enter Order ID (e.g. DARBO-8842)" style="flex:1; padding:0.75rem 1rem; border:1px solid var(--border-light); border-radius:var(--radius-pill); font-size:0.9rem; outline:none;" />
-        <button class="btn-primary-pill" onclick="startLiveTrackSim()" style="padding:0.75rem 1.4rem;">Track Live 🚀</button>
+        <button class="btn-primary-pill" onclick="startRealTrack()" style="padding:0.75rem 1.4rem;">Track Live 🚀</button>
       </div>
 
       <!-- TRACKING STATUS BADGE -->
@@ -1116,6 +1134,55 @@
     </div>
   </div>
 
+  <!-- BULK CUSTOMIZATION ORDER MODAL -->
+  <div class="modal-overlay" id="bulkOrderModal" onclick="if(event.target===this)closeBulkOrderModal()">
+    <div class="modal-card" style="max-width:560px;">
+      <button class="modal-close-btn" onclick="closeBulkOrderModal()">✕</button>
+      <div style="display:flex; align-items:center; gap:0.75rem; margin-bottom:0.5rem;">
+        <img src="images/logo.png" alt="DARBO" style="height:32px; width:auto;" />
+      </div>
+      <h3 style="font-family:var(--font-heading); font-weight:900; font-size:1.5rem; margin-bottom:0.25rem;">Bulk Custom Order</h3>
+      <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1.5rem;">Order 10+ custom printed outfits. We'll connect on WhatsApp to finalize pricing, design, and timeline.</p>
+
+      <div id="bulkOrderError" style="background:#FEF2F2; border:1px solid #FECACA; color:#DC2626; padding:0.65rem 1rem; border-radius:var(--radius-sm); font-size:0.85rem; margin-bottom:1rem; display:none;"></div>
+
+      <div style="display:flex; flex-direction:column; gap:0.85rem;">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.85rem;">
+          <input type="text" id="bulkContactName" placeholder="Your Name" required style="padding:0.75rem 1rem; border:1px solid var(--border-light); border-radius:12px; font-size:0.9rem; outline:none;" />
+          <input type="tel" id="bulkContactPhone" placeholder="Phone (10 digits)" maxlength="10" required style="padding:0.75rem 1rem; border:1px solid var(--border-light); border-radius:12px; font-size:0.9rem; outline:none;" />
+        </div>
+
+        <select id="bulkProductType" required style="padding:0.75rem 1rem; border:1px solid var(--border-light); border-radius:12px; font-size:0.9rem; background:#fff; outline:none;">
+          <option value="">Select Product Type</option>
+          <option value="Custom Printed T-Shirt">Custom Printed T-Shirt (₹699/piece)</option>
+          <option value="Custom Oversized Tee">Custom Oversized Tee (₹799/piece)</option>
+          <option value="Custom Hoodie">Custom Hoodie (₹1,299/piece)</option>
+          <option value="Mixed Products">Mixed Products (Tees + Hoodies)</option>
+        </select>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.85rem;">
+          <div>
+            <input type="number" id="bulkQuantity" placeholder="Quantity (min 10)" min="10" required oninput="validateBulkQuantity(this)" style="width:100%; padding:0.75rem 1rem; border:1px solid var(--border-light); border-radius:12px; font-size:0.9rem; outline:none;" />
+            <div id="bulkQtyHint" style="font-size:0.75rem; margin-top:0.3rem; min-height:1.1em;"></div>
+          </div>
+          <input type="text" id="bulkSizes" placeholder="Sizes (e.g. 5M, 3L, 2XL)" style="padding:0.75rem 1rem; border:1px solid var(--border-light); border-radius:12px; font-size:0.9rem; outline:none;" />
+        </div>
+
+        <input type="text" id="bulkEventName" placeholder="Event / Occasion (e.g. College Fest, Corporate Event)" style="padding:0.75rem 1rem; border:1px solid var(--border-light); border-radius:12px; font-size:0.9rem; outline:none;" />
+
+        <textarea id="bulkDesignNotes" placeholder="Design notes — share your idea, logo details, color preferences..." rows="3" style="padding:0.75rem 1rem; border:1px solid var(--border-light); border-radius:12px; font-size:0.9rem; outline:none; resize:vertical; font-family:var(--font-body);"></textarea>
+
+        <button onclick="submitBulkOrder()" class="btn-primary-pill" style="width:100%; justify-content:center; background:#25D366; font-size:1rem;">
+          💬 Proceed to WhatsApp for Bulk Order
+        </button>
+
+        <p style="font-size:0.75rem; color:var(--text-light); text-align:center; margin-top:-0.25rem;">
+          Bulk orders get special pricing. We'll finalize everything on WhatsApp.
+        </p>
+      </div>
+    </div>
+  </div>
+
   <!-- Back to Top Button -->
   <button class="back-to-top" id="backToTopBtn" onclick="scrollToTop()" aria-label="Back to top">
     <i data-lucide="arrow-up" style="width:20px;height:20px;"></i>
@@ -1125,7 +1192,10 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
   <!-- JS Scripts -->
   <script type="module" src="js/auth.js"></script>
+  <script type="module" src="js/firestore.js"></script>
   <script src="js/main.js"></script>
+  <script src="js/bulk-order.js"></script>
+  <script src="js/shiprocket.js"></script>
   <script>
     // Initialize Lucide Icons
     lucide.createIcons();

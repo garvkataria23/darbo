@@ -1,0 +1,70 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    // Helper: check if user is authenticated
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // Helper: check if user owns the resource (path contains their UID)
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // Helper: validate file type by extension
+    function isImage() {
+      return request.resource.contentType.matches('image/.*');
+    }
+
+    // Helper: max file size 5MB
+    function isValidSize() {
+      return request.resource.size < 5 * 1024 * 1024;
+    }
+
+    // ============================================================
+    // PRODUCT IMAGES — Public read, admin write
+    // ============================================================
+    match /products/{allPaths=**} {
+      allow read: if true;
+      allow write: if isAuthenticated() &&
+        request.auth.token.admin == true &&
+        isImage() &&
+        isValidSize();
+    }
+
+    // ============================================================
+    // USER PROFILES — Users manage their own avatars
+    // ============================================================
+    match /users/{userId}/{allPaths=**} {
+      allow read: if true;
+      allow create, update, delete: if isOwner(userId) &&
+        isImage() &&
+        isValidSize();
+    }
+
+    // ============================================================
+    // CUSTOM DESIGNS — Users manage their own design previews
+    // ============================================================
+    match /custom_designs/{userId}/{allPaths=**} {
+      allow read: if isOwner(userId);
+      allow create, update, delete: if isOwner(userId) &&
+        isImage() &&
+        isValidSize();
+    }
+
+    // ============================================================
+    // ORDER RECEIPTS — Owner can read, system writes via Admin SDK
+    // ============================================================
+    match /orders/{orderId}/{allPaths=**} {
+      allow read: if isAuthenticated() &&
+        (request.auth.uid == orderId.split('_')[0] || request.auth.token.admin == true);
+      allow write: if false; // Only Admin SDK writes here
+    }
+
+    // Block everything else
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

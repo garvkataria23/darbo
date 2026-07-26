@@ -1,28 +1,317 @@
+// ===============================================================
+// DARBO — Firestore Security Rules (Prototype)
+// Project: darbo-e0752
+// ===============================================================
+//
+// Assumed Data Model
+// ===============================================================
+//
+// Collection: users
+// Document ID: {userId} (Firebase Auth UID)
+// Fields:
+//   - uid: string (required, immutable) - Firebase Auth UID
+//   - email: string (required) - User email address
+//   - displayName: string (required) - User display name
+//   - photoURL: string (optional) - Profile photo URL
+//   - phoneNumber: string (optional) - Phone number
+//   - role: string (required) - 'customer' or 'admin' (immutable for non-admins)
+//   - cart: list (optional, max 50) - Array of {productId, title, price, image, size, qty}
+//   - wishlist: list (optional, max 100) - Array of product IDs
+//   - recentlyViewed: list (optional, max 20) - Array of product IDs
+//   - addresses: list (optional, max 10) - Array of address objects
+//   - createdAt: timestamp (required, immutable) - Account creation time
+//   - updatedAt: timestamp (required) - Last profile update time
+//
+// Collection: products
+// Document ID: {productId} (auto-generated or custom)
+// Fields:
+//   - id: string (required) - Product ID
+//   - title: string (required) - Product name
+//   - description: string (optional) - Product description
+//   - price: number (required) - Price in INR (must be positive)
+//   - originalPrice: number (optional) - Original price before discount
+//   - category: string (required) - Product category
+//   - image: string (required) - Primary image URL
+//   - images: list (optional, max 10) - Additional image URLs
+//   - sizes: list (required, max 10) - Available sizes
+//   - colors: list (optional, max 10) - Available colors
+//   - inStock: bool (required) - Stock availability
+//   - stockCount: number (optional) - Number in stock
+//   - featured: bool (optional) - Featured on homepage
+//   - rating: number (optional) - Average rating (0-5)
+//   - reviewCount: number (optional) - Total reviews
+//   - tags: list (optional, max 20) - Search tags
+//   - createdAt: timestamp (required, immutable)
+//   - updatedAt: timestamp (required)
+//
+// Collection: orders
+// Document ID: {orderId} (auto-generated)
+// Fields:
+//   - id: string (required) - Order ID
+//   - userId: string (required) - Customer's Firebase UID
+//   - items: list (required, max 100) - Order line items
+//   - subtotal: number (required) - Order subtotal
+//   - shipping: number (required) - Shipping cost
+//   - total: number (required) - Total amount
+//   - currency: string (required) - 'INR'
+//   - status: string (required) - 'pending','confirmed','shipped','delivered','cancelled'
+//   - shippingAddress: map (required) - Delivery address
+//   - paymentId: string (optional) - Razorpay payment ID
+//   - orderId: string (optional) - Razorpay order ID
+//   - awbNumber: string (optional) - Shiprocket AWB tracking number
+//   - estimatedDelivery: string (optional) - Estimated delivery date
+//   - createdAt: timestamp (required, immutable)
+//   - updatedAt: timestamp (required)
+//
+// Collection: custom_designs
+// Document ID: {designId} (auto-generated)
+// Fields:
+//   - userId: string (required, immutable) - Owner's Firebase UID
+//   - title: string (required) - Design name
+//   - productType: string (required) - 'tshirt', 'hoodie', etc.
+//   - designData: map (optional) - Design parameters
+//   - previewUrl: string (optional) - Preview image URL
+//   - createdAt: timestamp (required, immutable)
+//   - updatedAt: timestamp (required)
+//
+// ===============================================================
+
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // User Accounts Collection: users can read & write their own account data
+    // ============================================================
+    // Helper Functions
+    // ============================================================
+
+    // Check if the user is authenticated
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // Check if user owns the resource
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // Check if user owns the document based on uid/userId field
+    function isDocOwner() {
+      return isAuthenticated() && request.auth.uid == resource.data.uid;
+    }
+
+    // Check if user owns the document based on userId field
+    function isOrderByOwner() {
+      return isAuthenticated() && request.auth.uid == resource.data.userId;
+    }
+
+    // Verify UID hasn't been tampered with on create
+    function uidUnchanged() {
+      return !('uid' in request.resource.data) ||
+        request.resource.data.uid == request.auth.uid;
+    }
+
+    // Ensure uid field is not modified on update
+    function uidNotModified() {
+      return !('uid' in request.resource.data) ||
+        request.resource.data.uid == resource.data.uid;
+    }
+
+    // Ensure userId field is not modified on update
+    function userIdNotModified() {
+      return !('userId' in request.resource.data) ||
+        request.resource.data.userId == resource.data.userId;
+    }
+
+    // Validate required fields exist
+    function hasRequiredFields(fields) {
+      return request.resource.data.keys().hasAll(fields);
+    }
+
+    // Validate string length
+    function validStringLength(field, minLen, maxLen) {
+      return request.resource.data[field] is string &&
+        request.resource.data[field].size() >= minLen &&
+        request.resource.data[field].size() <= maxLen;
+    }
+
+    // Validate that a value is positive
+    function isPositive(field) {
+      return request.resource.data[field] is number &&
+        request.resource.data[field] > 0;
+    }
+
+    // Validate that a list is a list and enforces size limits
+    function isValidList(field, maxSize) {
+      return request.resource.data[field] is list &&
+        request.resource.data[field].size() <= maxSize;
+    }
+
+    // Validate that a timestamp is recent (within the last 10 minutes)
+    function isRecent(time) {
+      return time is timestamp &&
+        time > request.time - duration.value(10, 'm') &&
+        time <= request.time;
+    }
+
+    // Validate email format
+    function isValidEmail(email) {
+      return email is string &&
+        email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$");
+    }
+
+    // Check if admin role via custom claims
+    function isAdmin() {
+      return isAuthenticated() && request.auth.token.admin == true;
+    }
+
+    // Validate role value
+    function isValidRole() {
+      return request.resource.data.role in ['customer', 'admin'];
+    }
+
+    // Validate order status
+    function isValidOrderStatus() {
+      let validStatuses = ['pending', 'confirmed', 'shipped', 'delivered', 'cancelled'];
+      return request.resource.data.status in validStatuses;
+    }
+
+    // Ensure immutable fields unchanged on update
+    function createdAtUnchanged() {
+      return !request.resource.data.diff(resource.data).affectedKeys().hasAny(['createdAt']);
+    }
+
+    // ============================================================
+    // USERS Collection
+    // ============================================================
     match /users/{userId} {
-      allow read, write: if request.auth != null && request.auth.uid == userId;
+      // Users can read their own profile
+      allow read: if isOwner(userId);
+
+      // Users can create their own profile (role must be 'customer')
+      allow create: if isOwner(userId) &&
+        hasRequiredFields(['uid', 'email', 'displayName', 'role', 'createdAt', 'updatedAt']) &&
+        uidUnchanged() &&
+        request.resource.data.uid == userId &&
+        request.resource.data.email is string &&
+        isValidEmail(request.resource.data.email) &&
+        request.resource.data.displayName is string &&
+        request.resource.data.displayName.size() > 0 &&
+        request.resource.data.displayName.size() <= 100 &&
+        request.resource.data.role == 'customer' &&
+        request.resource.data.createdAt is timestamp;
+
+      // Users can update their own profile (cannot change uid, role, or email)
+      allow update: if isOwner(userId) &&
+        uidNotModified() &&
+        createdAtUnchanged() &&
+        request.resource.data.email == resource.data.email &&
+        request.resource.data.role == resource.data.role &&
+        request.resource.data.uid == resource.data.uid &&
+        request.resource.data.updatedAt is timestamp;
+
+      // No delete allowed — profiles are soft-archived
+      allow delete: if false;
     }
 
-    // Orders Collection: authenticated users can create & read their own orders
-    match /orders/{orderId} {
-      allow create: if request.auth != null;
-      allow read: if request.auth != null && request.auth.uid == resource.data.userId;
-    }
-
-    // Products Collection: public read access for storefront catalog
+    // ============================================================
+    // PRODUCTS Collection (Admin CRUD, Public Read)
+    // ============================================================
     match /products/{productId} {
+      // Anyone can read products (public catalog)
       allow read: if true;
-      allow write: if request.auth != null && request.auth.token.admin == true;
+
+      // Only admins can create products
+      allow create: if isAdmin() &&
+        hasRequiredFields(['id', 'title', 'price', 'category', 'image', 'sizes', 'inStock', 'createdAt', 'updatedAt']) &&
+        request.resource.data.id == productId &&
+        request.resource.data.title is string &&
+        request.resource.data.title.size() > 0 &&
+        request.resource.data.title.size() <= 200 &&
+        isPositive('price') &&
+        request.resource.data.category is string &&
+        request.resource.data.category.size() > 0 &&
+        request.resource.data.category.size() <= 50 &&
+        request.resource.data.image is string &&
+        request.resource.data.sizes is list &&
+        request.resource.data.sizes.size() > 0 &&
+        request.resource.data.sizes.size() <= 10 &&
+        request.resource.data.inStock is bool &&
+        request.resource.data.createdAt is timestamp;
+
+      // Only admins can update products
+      allow update: if isAdmin() &&
+        request.resource.data.id == resource.data.id &&
+        createdAtUnchanged() &&
+        request.resource.data.updatedAt is timestamp;
+
+      // Only admins can delete products
+      allow delete: if isAdmin();
     }
 
-    // Custom Outfit Designs: users can manage their own saved custom streetwear designs
+    // ============================================================
+    // ORDERS Collection
+    // ============================================================
+    match /orders/{orderId} {
+      // Users can read their own orders; admins can read all
+      allow read: if isOrderByOwner() || isAdmin();
+
+      // Authenticated users can create orders (for themselves)
+      allow create: if isAuthenticated() &&
+        request.auth.uid == request.resource.data.userId &&
+        hasRequiredFields(['userId', 'items', 'total', 'currency', 'status', 'shippingAddress', 'createdAt', 'updatedAt']) &&
+        request.resource.data.userId is string &&
+        request.resource.data.items is list &&
+        request.resource.data.items.size() > 0 &&
+        request.resource.data.items.size() <= 100 &&
+        isPositive('total') &&
+        request.resource.data.currency == 'INR' &&
+        request.resource.data.status == 'pending' &&
+        request.resource.data.shippingAddress is map &&
+        request.resource.data.createdAt is timestamp;
+
+      // Users can update their own orders (limited fields); admins can update any
+      allow update: if (isOrderByOwner() &&
+        userIdNotModified() &&
+        createdAtUnchanged() &&
+        request.resource.data.status == resource.data.status &&
+        request.resource.data.updatedAt is timestamp) ||
+        (isAdmin() &&
+        userIdNotModified() &&
+        createdAtUnchanged() &&
+        isValidOrderStatus() &&
+        request.resource.data.updatedAt is timestamp);
+
+      // No delete — orders are soft-archived via status
+      allow delete: if false;
+    }
+
+    // ============================================================
+    // CUSTOM DESIGNS Collection
+    // ============================================================
     match /custom_designs/{designId} {
-      allow create: if request.auth != null;
-      allow read, update, delete: if request.auth != null && request.auth.uid == resource.data.userId;
+      // Users can read their own designs
+      allow read: if isAuthenticated() && request.auth.uid == resource.data.userId;
+
+      // Authenticated users can create designs
+      allow create: if isAuthenticated() &&
+        request.auth.uid == request.resource.data.userId &&
+        hasRequiredFields(['userId', 'title', 'productType', 'createdAt', 'updatedAt']) &&
+        request.resource.data.userId is string &&
+        request.resource.data.title is string &&
+        request.resource.data.title.size() > 0 &&
+        request.resource.data.title.size() <= 100 &&
+        request.resource.data.productType is string &&
+        request.resource.data.createdAt is timestamp;
+
+      // Users can update their own designs
+      allow update: if isAuthenticated() &&
+        request.auth.uid == resource.data.userId &&
+        userIdNotModified() &&
+        createdAtUnchanged() &&
+        request.resource.data.updatedAt is timestamp;
+
+      // Users can delete their own designs
+      allow delete: if isAuthenticated() && request.auth.uid == resource.data.userId;
     }
   }
 }

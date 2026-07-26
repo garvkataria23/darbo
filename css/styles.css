@@ -1932,6 +1932,28 @@ input, select, textarea {
     gap: 1rem !important;
   }
 
+  /* Reviews Horizontal Scroll Carousel - Mobile */
+  .about-section .reviews-grid {
+    display: flex !important;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    gap: 1rem !important;
+    padding-bottom: 1rem;
+    margin: 0 -1.25rem;
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+    scrollbar-width: none;
+  }
+  .about-section .reviews-grid::-webkit-scrollbar {
+    display: none;
+  }
+  .about-section .review-card {
+    flex: 0 0 85%;
+    scroll-snap-align: center;
+    min-width: 0;
+  }
+
   .contact-section {
     padding: 3rem 0 !important;
   }
@@ -2968,3 +2990,49 @@ input, select, textarea {
 img[data-src] { filter: blur(10px); transition: filter 0.5s ease; }
 img.loaded { filter: blur(0); }
 @media (prefers-reduced-motion: reduce) { * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; } }
+
+/* ============================================================
+   DARBO — Delivery Badge, Bulk Order, & Events Additions
+   ============================================================ */
+
+/* Delivery date badge on product cards */
+.delivery-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.7rem;
+  color: #059669;
+  font-weight: 600;
+  margin-top: 0.2rem;
+  padding: 0;
+}
+
+/* Bulk order button in customizer */
+.btn-bulk-order {
+  background: var(--text-dark);
+  color: #fff;
+  width: 100%;
+  justify-content: center;
+}
+
+/* Events page link in navbar */
+.nav-link[href="events.html"] {
+  position: relative;
+}
+.nav-link[href="events.html"]::after {
+  content: '🎉';
+  position: absolute;
+  top: -8px;
+  right: -12px;
+  font-size: 0.6rem;
+}
+
+/* Smooth page transition */
+.checkout-page,
+.festivals-page {
+  animation: fadeInPage 0.4s ease-out;
+}
+@keyframes fadeInPage {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}

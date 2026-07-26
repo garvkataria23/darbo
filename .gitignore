@@ -1,5 +1,11 @@
 .agents/
+.claude/
 skills-lock.json
 scratch/
 node_modules/
+functions/node_modules/
 .vercel/
+.firebase/
+.env
+CON
+package-lock.json

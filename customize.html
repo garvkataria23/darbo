@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Custom Design Studio — DARBO | Create Your Own</title>
+  <meta name="description" content="Design your own custom T-shirt or Hoodie. Upload your artwork, logo, or photo. Drag, resize, and position your design in real-time. DARBO Custom Design Studio." />
+
+  <link rel="icon" type="image/png" href="images/logo.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/customizer.css" />
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script>
+    if (typeof pdfjsLib !== 'undefined') {
+      pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    }
+  </script>
+</head>
+<body>
+
+  <div class="customize-page">
+
+    <!-- HEADER -->
+    <header class="customize-header">
+      <div class="customize-header-inner">
+        <a href="index.html">
+          <img src="images/logo.png" alt="DARBO" class="customize-logo" />
+        </a>
+        <div class="customize-header-title">
+          <span class="live-dot"></span>
+          Custom Design Studio
+        </div>
+        <div class="customize-header-actions">
+          <a href="index.html" class="btn-back-shop">
+            <i data-lucide="arrow-left" style="width:14px;height:14px;"></i>
+            Back to Shop
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <!-- MAIN BODY -->
+    <div class="customize-body">
+
+      <!-- LEFT: CANVAS PREVIEW -->
+      <div class="canvas-area">
+        <div class="canvas-title">Live Preview</div>
+        <div class="canvas-subtitle">Drag, resize, and position your design on the garment</div>
+
+        <div class="canvas-wrapper">
+          <div class="print-area-badge">
+            <span class="green-dot"></span>
+            Print Area
+          </div>
+          <div class="canvas-empty-state" id="canvasEmptyState">
+            <div class="canvas-empty-icon">
+              <i data-lucide="upload-cloud"></i>
+            </div>
+            <div class="canvas-empty-text">Upload Your Design</div>
+            <div class="canvas-empty-sub">Drag & drop or use the upload panel</div>
+          </div>
+          <canvas id="designCanvas"></canvas>
+          <!-- Loading overlay shown while Fabric.js CDN loads -->
+          <div id="canvasLoadingOverlay" style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(255,255,255,0.92);border-radius:var(--radius-md);z-index:5;">
+            <div style="width:48px;height:48px;border:3px solid var(--border-light);border-top-color:var(--coral-primary);border-radius:50%;animation:spin 0.8s linear infinite;"></div>
+            <div style="margin-top:1rem;font-size:0.85rem;font-weight:700;color:var(--text-dark);font-family:var(--font-heading);">Loading Studio...</div>
+            <div style="margin-top:0.3rem;font-size:0.72rem;color:var(--text-muted);">Fetching design tools</div>
+          </div>
+        </div>
+
+        <div class="canvas-toolbar">
+          <button class="toolbar-btn disabled" id="toolbarDelete" title="Delete" onclick="toolbarDelete()">
+            <i data-lucide="trash-2" style="width:16px;height:16px;"></i>
+          </button>
+          <div class="toolbar-divider"></div>
+          <button class="toolbar-btn disabled" id="toolbarFront" title="Bring Front" onclick="toolbarBringFront()">
+            <i data-lucide="arrow-up-to-line" style="width:16px;height:16px;"></i>
+          </button>
+          <button class="toolbar-btn disabled" id="toolbarBack" title="Send Back" onclick="toolbarSendBack()">
+            <i data-lucide="arrow-down-to-line" style="width:16px;height:16px;"></i>
+          </button>
+          <div class="toolbar-divider"></div>
+          <button class="toolbar-btn" title="Reset Canvas" onclick="toolbarResetCanvas()">
+            <i data-lucide="rotate-ccw" style="width:16px;height:16px;"></i>
+          </button>
+          <button class="toolbar-btn" title="Download Design" onclick="toolbarDownload()">
+            <i data-lucide="download" style="width:16px;height:16px;"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- RIGHT: CONTROLS PANEL -->
+      <div class="controls-panel">
+
+        <!-- STEP 1: Garment Selection -->
+        <div class="control-card">
+          <div class="control-card-header">
+            <div class="step-number" id="step1Num">1</div>
+            <div class="step-title">Choose Your Garment</div>
+          </div>
+
+          <div class="garment-type-grid">
+            <button class="garment-type-btn active" data-type="tshirt">
+              <div class="garment-icon">👕</div>
+              <div class="garment-label">T-Shirt</div>
+              <div class="garment-price">Starting ₹799</div>
+            </button>
+            <button class="garment-type-btn" data-type="hoodie">
+              <div class="garment-icon">🧥</div>
+              <div class="garment-label">Hoodie</div>
+              <div class="garment-price">Starting ₹1,299</div>
+            </button>
+          </div>
+
+          <div class="color-label">Select Color</div>
+          <div class="color-swatches" id="colorSwatches"></div>
+
+          <div class="color-label">Select Size</div>
+          <div class="size-grid" id="sizeGrid"></div>
+        </div>
+
+        <!-- STEP 2: Upload Design -->
+        <div class="control-card">
+          <div class="control-card-header">
+            <div class="step-number" id="step2Num">2</div>
+            <div class="step-title">Upload Your Design</div>
+          </div>
+
+          <div class="upload-zone" id="uploadZone">
+            <input type="file" id="fileInput" accept=".png,.jpg,.jpeg,.webp,.pdf" style="display:none;" />
+            <div class="upload-icon"><i data-lucide="cloud-upload"></i></div>
+            <div class="upload-title">Drop your design here</div>
+            <div class="upload-sub">or click to browse files</div>
+            <div class="upload-btn"><i data-lucide="plus" style="width:14px;height:14px;"></i> Choose File</div>
+            <div class="upload-formats">PNG, JPG, JPEG, PDF &bull; Max 10MB</div>
+          </div>
+        </div>
+
+        <!-- STEP 3: Position & Style -->
+        <div class="control-card">
+          <div class="control-card-header">
+            <div class="step-number" id="step3Num">3</div>
+            <div class="step-title">Position & Style</div>
+          </div>
+
+          <div class="position-controls">
+            <div class="control-row">
+              <span class="control-label">Size</span>
+              <input type="range" class="control-slider" id="scaleSlider" min="0.1" max="3" step="0.05" value="1" />
+              <span class="control-value" id="scaleValue">100%</span>
+            </div>
+            <div class="control-row">
+              <span class="control-label">Rotate</span>
+              <input type="range" class="control-slider" id="angleSlider" min="0" max="360" step="1" value="0" />
+              <span class="control-value" id="angleValue">0&deg;</span>
+            </div>
+          </div>
+
+          <div style="margin-top:1.25rem; border-top:1px solid var(--border-light); padding-top:1.25rem;">
+            <div style="font-size:0.8rem; font-weight:700; color:var(--text-dark); margin-bottom:0.5rem;">
+              <i data-lucide="type" style="width:14px;height:14px;display:inline-block;vertical-align:middle;margin-right:0.3rem;"></i>
+              Add Text Overlay
+            </div>
+            <div class="text-input-group">
+              <input type="text" class="text-input" id="textInput" placeholder="Type your text..." maxlength="40" />
+              <button class="text-add-btn" id="textAddBtn">Add</button>
+            </div>
+            <div class="text-options" id="textFontOptions"></div>
+            <div class="text-color-options" id="textColorOptions"></div>
+          </div>
+        </div>
+
+        <!-- STEP 4: Quantity & Multi-Variants -->
+        <div class="control-card">
+          <div class="control-card-header">
+            <div class="step-number" id="step4Num">4</div>
+            <div class="step-title">Quantity & Variants</div>
+          </div>
+
+          <!-- Single quantity selector -->
+          <div id="singleQtySection">
+            <div style="display:flex;align-items:center;justify-content:space-between;">
+              <span style="font-size:0.82rem;font-weight:700;color:var(--text-dark);">Quantity</span>
+              <div class="qty-selector">
+                <button class="qty-btn" onclick="changeQty(-1)">-</button>
+                <div class="qty-display" id="qtyDisplay">1</div>
+                <button class="qty-btn" onclick="changeQty(1)">+</button>
+              </div>
+            </div>
+            <div class="qty-hint" id="qtyHint">1 piece &bull; ₹799 per piece</div>
+          </div>
+
+          <!-- Variant mode toggle -->
+          <div style="margin-top:1rem;">
+            <div class="variant-mode-toggle" id="variantModeToggle" onclick="toggleVariantMode()">
+              <div class="variant-mode-label">
+                <span class="icon">👥</span>
+                <div>
+                  <span class="text">Same Design, Different Texts</span>
+                  <span class="desc">Team orders, event merch, bulk customization</span>
+                </div>
+              </div>
+              <div class="variant-toggle-switch" id="variantToggle"></div>
+            </div>
+          </div>
+
+          <!-- Variant Builder (hidden by default) -->
+          <div class="variant-builder" id="variantBuilder">
+            <div class="variant-list" id="variantList">
+              <!-- Rendered by JS -->
+            </div>
+            <button class="variant-add-btn" onclick="addVariant()">
+              <i data-lucide="plus" style="width:14px;height:14px;"></i>
+              Add Another Variant
+            </button>
+            <div class="variant-summary" id="variantSummary" style="display:none;">
+              <span>&#x2714;</span>
+              <span id="variantSummaryText"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 5: Shipping Details -->
+        <div class="control-card">
+          <div class="control-card-header">
+            <div class="step-number" id="step5Num">5</div>
+            <div class="step-title">Shipping Details</div>
+          </div>
+
+          <div class="shipping-form-grid">
+            <div class="shipping-field">
+              <label>Full Name *</label>
+              <input type="text" id="shipName" placeholder="Arjun Mehta" />
+              <span class="field-error">Please enter your name</span>
+            </div>
+            <div class="shipping-field">
+              <label>Phone Number *</label>
+              <input type="tel" id="shipPhone" placeholder="98765 43210" maxlength="10" />
+              <span class="field-error">Enter valid 10-digit phone</span>
+            </div>
+            <div class="shipping-field full-width">
+              <label>Email Address *</label>
+              <input type="email" id="shipEmail" placeholder="arjun@example.com" />
+              <span class="field-error">Enter valid email</span>
+            </div>
+            <div class="shipping-field full-width">
+              <label>Shipping Address *</label>
+              <textarea id="shipAddress" placeholder="Flat 12, Lotus Society, SV Road, Borivali West"></textarea>
+              <span class="field-error">Enter your full address</span>
+            </div>
+            <div class="shipping-field">
+              <label>City *</label>
+              <input type="text" id="shipCity" placeholder="Mumbai" />
+              <span class="field-error">Enter city</span>
+            </div>
+            <div class="shipping-field">
+              <label>Pincode *</label>
+              <input type="text" id="shipPincode" placeholder="400092" maxlength="6" />
+              <span class="field-error">Enter valid 6-digit pincode</span>
+            </div>
+            <div class="shipping-field full-width">
+              <label>State *</label>
+              <select id="shipState">
+                <option value="">Select State</option>
+                <option>Andhra Pradesh</option>
+                <option>Arunachal Pradesh</option>
+                <option>Assam</option>
+                <option>Bihar</option>
+                <option>Chhattisgarh</option>
+                <option>Delhi</option>
+                <option>Goa</option>
+                <option>Gujarat</option>
+                <option>Haryana</option>
+                <option>Himachal Pradesh</option>
+                <option>Jharkhand</option>
+                <option>Karnataka</option>
+                <option>Kerala</option>
+                <option>Madhya Pradesh</option>
+                <option>Maharashtra</option>
+                <option>Manipur</option>
+                <option>Meghalaya</option>
+                <option>Mizoram</option>
+                <option>Nagaland</option>
+                <option>Odisha</option>
+                <option>Punjab</option>
+                <option>Rajasthan</option>
+                <option>Sikkim</option>
+                <option>Tamil Nadu</option>
+                <option>Telangana</option>
+                <option>Tripura</option>
+                <option>Uttar Pradesh</option>
+                <option>Uttarakhand</option>
+                <option>West Bengal</option>
+              </select>
+              <span class="field-error">Select your state</span>
+            </div>
+            <div class="shipping-field full-width">
+              <label>Order Notes (optional)</label>
+              <input type="text" id="shipNotes" placeholder="Any special instructions for your order..." />
+            </div>
+          </div>
+        </div>
+
+        <!-- PRICE & ADD TO CART -->
+        <div class="price-cart-section">
+          <div class="price-row">
+            <span class="price-label" id="garmentTypeLabel">Custom T-Shirt</span>
+            <div>
+              <span class="price-value" id="designPrice">₹799</span>
+              <span class="price-original" id="designOriginalPrice">₹1299</span>
+            </div>
+          </div>
+
+          <div class="price-breakdown" id="priceBreakdown">
+            <div class="price-breakdown-row">
+              <span>Base price per piece</span>
+              <span id="breakdownBase">₹799</span>
+            </div>
+            <div class="price-breakdown-row" id="breakdownQtyRow" style="display:none;">
+              <span>Quantity</span>
+              <span id="breakdownQty">x1</span>
+            </div>
+            <div class="price-breakdown-row" id="breakdownDiscountRow" style="display:none;">
+              <span>Bulk discount</span>
+              <span id="breakdownDiscount" class="discount">-₹0</span>
+            </div>
+            <div class="price-breakdown-row total">
+              <span>Total</span>
+              <span id="breakdownTotal">₹799</span>
+            </div>
+          </div>
+
+          <div id="bulkBadgeContainer"></div>
+
+          <div class="price-note">
+            Free express shipping &bull; Premium DTG print &bull; 5-7 day delivery
+          </div>
+
+          <button class="add-to-cart-btn" id="addToCartBtn" onclick="addCustomDesignToCart()">
+            <i data-lucide="shopping-bag" style="width:18px;height:18px;"></i>
+            Add to Cart — ₹799
+          </button>
+
+          <button class="whatsapp-btn" onclick="sendWhatsAppDesign()">
+            💬 Order on WhatsApp
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts: customizer.js first (defines functions), then modules, then init -->
+  <script src="js/customizer.js"></script>
+  <script type="module" src="js/auth.js"></script>
+  <script type="module" src="js/firestore.js"></script>
+  <script>
+    // Initialize Lucide icons for static HTML elements
+    if (window.lucide) lucide.createIcons();
+    // Loading overlay removal is handled by customizer.js DOMContentLoaded handler
+  </script>
+
+</body>
+</html>

@@ -1,27 +1,41 @@
 {
-  "auth": {
-    "providers": {
-      "emailPassword": true,
-      "phone": true,
-      "googleSignIn": {
-        "oAuthBrandDisplayName": "DARBO — Own Your Story",
-        "supportEmail": "darbooffice@gmail.com",
-        "authorizedRedirectUris": [
-          "http://localhost:8080",
-          "http://localhost"
-        ]
-      }
-    }
-  },
   "firestore": {
     "rules": "firestore.rules"
+  },
+  "storage": {
+    "rules": "storage.rules"
   },
   "hosting": {
     "public": ".",
     "ignore": [
       "firebase.json",
       "**/.*",
-      "**/node_modules/**"
+      "**/node_modules/**",
+      "functions/**"
+    ],
+    "rewrites": [
+      {
+        "source": "/customize",
+        "destination": "/customize.html"
+      },
+      {
+        "source": "/api/**",
+        "function": {
+          "functionId": "razorpayCreateOrder"
+        }
+      }
     ]
-  }
+  },
+  "functions": [
+    {
+      "source": "functions",
+      "codebase": "default",
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log"
+      ]
+    }
+  ]
 }
