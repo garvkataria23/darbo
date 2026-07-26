@@ -13,6 +13,36 @@ let wishlist = JSON.parse(localStorage.getItem('darbo_wishlist') || '[]');
 let recentlyViewed = JSON.parse(localStorage.getItem('darbo_recent') || '[]');
 let discountPercent = 0;
 
+/* Firestore Sync Helper — saves cart/wishlist/recentlyViewed to cloud */
+function syncDataToFirestore() {
+  if (window.darboCurrentUser && window.saveUserDataToFirestore) {
+    window.saveUserDataToFirestore({
+      cart: cart,
+      wishlist: wishlist,
+      recentlyViewed: recentlyViewed
+    });
+  }
+}
+
+/* Called by auth.js when user logs in — loads cloud data */
+window.onUserDataLoaded = function(userData) {
+  if (userData.cart && userData.cart.length > 0) {
+    cart = userData.cart;
+    localStorage.setItem('darbo_cart', JSON.stringify(cart));
+  }
+  if (userData.wishlist && userData.wishlist.length > 0) {
+    wishlist = userData.wishlist;
+    localStorage.setItem('darbo_wishlist', JSON.stringify(wishlist));
+  }
+  if (userData.recentlyViewed && userData.recentlyViewed.length > 0) {
+    recentlyViewed = userData.recentlyViewed;
+    localStorage.setItem('darbo_recent', JSON.stringify(recentlyViewed));
+  }
+  updateCartUI();
+  renderRecentlyViewed();
+  showToast('Your saved data loaded from cloud! ☁️');
+};
+
 // Initial Products Data
 const defaultProducts = [
   {
@@ -343,6 +373,7 @@ function updateCartUI() {
   const cartSubtotal = document.getElementById('cartSubtotal');
 
   localStorage.setItem('darbo_cart', JSON.stringify(cart));
+  syncDataToFirestore();
 
   const totalItems = cart.reduce((sum, i) => sum + i.qty, 0);
   let totalPrice = cart.reduce((sum, i) => sum + (i.price * i.qty), 0);
@@ -427,6 +458,7 @@ function completeOrder(e) {
   closeCheckoutModal();
   cart = [];
   localStorage.removeItem('darbo_cart');
+  syncDataToFirestore();
   updateCartUI();
   toggleCart();
   showToast('🎉 Order Placed Successfully! Thank you for buying from DARBO!');
@@ -450,6 +482,7 @@ function openQuickView(productId) {
   recentlyViewed.unshift(productId);
   if (recentlyViewed.length > 6) recentlyViewed.pop();
   localStorage.setItem('darbo_recent', JSON.stringify(recentlyViewed));
+  syncDataToFirestore();
   renderRecentlyViewed();
 
   const modal = document.getElementById('quickViewModal');
@@ -550,6 +583,7 @@ function toggleWishlist(btn, productId) {
   }
   
   localStorage.setItem('darbo_wishlist', JSON.stringify(wishlist));
+  syncDataToFirestore();
 }
 
 function getWishlistCount() {

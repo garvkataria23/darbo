@@ -286,11 +286,58 @@ window.handleForgotPassword = async function() {
   }
 };
 
-// 10. AUTH STATE OBSERVER
+// 10. EXPOSE FIREBASE INSTANCES TO WINDOW (for main.js)
+window.darboAuth = auth;
+window.darboDB = db;
+
+// 11. FIRESTORE USER DATA SYNC — Save cart/wishlist/recentlyViewed to Firestore
+async function saveUserDataToFirestore(userData) {
+  if (!db || !auth || !auth.currentUser) return;
+  try {
+    const userRef = doc(db, "users", auth.currentUser.uid);
+    await setDoc(userRef, {
+      cart: userData.cart || [],
+      wishlist: userData.wishlist || [],
+      recentlyViewed: userData.recentlyViewed || [],
+      updatedAt: serverTimestamp()
+    }, { merge: true });
+  } catch (error) {
+    console.error("Error saving user data to Firestore:", error);
+  }
+}
+
+async function loadUserDataFromFirestore() {
+  if (!db || !auth || !auth.currentUser) return null;
+  try {
+    const userRef = doc(db, "users", auth.currentUser.uid);
+    const snap = await getDoc(userRef);
+    if (snap.exists()) {
+      return snap.data();
+    }
+    return null;
+  } catch (error) {
+    console.error("Error loading user data from Firestore:", error);
+    return null;
+  }
+}
+
+window.saveUserDataToFirestore = saveUserDataToFirestore;
+window.loadUserDataFromFirestore = loadUserDataFromFirestore;
+
+// 12. AUTH STATE OBSERVER — Load user data on login
 if (auth) {
-  onAuthStateChanged(auth, (user) => {
+  onAuthStateChanged(auth, async (user) => {
     if (user) {
       console.log("Current User: ", user.email || user.phoneNumber || user.uid);
+      window.darboCurrentUser = user;
+
+      // Load saved data from Firestore
+      const userData = await loadUserDataFromFirestore();
+      if (userData && typeof window.onUserDataLoaded === 'function') {
+        window.onUserDataLoaded(userData);
+      }
+    } else {
+      window.darboCurrentUser = null;
     }
   });
 }
