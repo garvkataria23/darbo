@@ -1093,9 +1093,9 @@ function showSuccessOverlay(totalQty, totalAmount) {
 }
 
 // ============================================================
-// WHATSAPP
+// WHATSAPP — Export canvas image + order details
 // ============================================================
-function sendWhatsAppDesign() {
+function buildWhatsAppMessage() {
   const totalQty = state.variantMode
     ? state.variants.reduce((sum, v) => sum + v.qty, 0)
     : state.qty;
@@ -1137,8 +1137,91 @@ function sendWhatsAppDesign() {
   }
 
   msg += `\nPlease share the design details!`;
+  return msg;
+}
 
-  window.open(`https://wa.me/918355983699?text=${encodeURIComponent(msg)}`, '_blank');
+function exportCanvasAsBlob() {
+  return new Promise((resolve) => {
+    // Deselect objects so handles/borders don't appear in export
+    canvas.discardActiveObject();
+    canvas.renderAll();
+
+    // Export the full canvas WITH the garment mockup background
+    // so DARBO can see exactly how the customer wants the design placed
+    const dataUrl = canvas.toDataURL({ format: 'png', multiplier: 2 });
+
+    fetch(dataUrl)
+      .then(res => res.blob())
+      .then(blob => resolve(blob))
+      .catch(() => resolve(null));
+  });
+}
+
+async function sendWhatsAppDesign() {
+  if (!canvas) {
+    showDesignToast('Canvas not ready. Please wait.', 'error');
+    return;
+  }
+
+  // Check if a design has been uploaded
+  if (!uploadedDesign) {
+    showDesignToast('Please upload a design first before sending to WhatsApp.', 'error');
+    return;
+  }
+
+  showDesignToast('Preparing your design...', 'info');
+
+  const msg = buildWhatsAppMessage();
+  const designBlob = await exportCanvasAsBlob();
+
+  if (!designBlob) {
+    // Fallback: just open WhatsApp with text
+    window.open(`https://wa.me/918355983699?text=${encodeURIComponent(msg)}`, '_blank');
+    return;
+  }
+
+  const designFile = new File([designBlob], 'darbo-design.png', { type: 'image/png' });
+  const waUrl = `https://wa.me/918355983699?text=${encodeURIComponent(msg)}`;
+
+  // --- MOBILE: Try Web Share API (image + text together) ---
+  if (navigator.share && navigator.canShare) {
+    try {
+      const shareData = {
+        title: 'DARBO Custom Design',
+        text: msg,
+        files: [designFile],
+      };
+      if (navigator.canShare(shareData)) {
+        await navigator.share(shareData);
+        showDesignToast('Design shared to WhatsApp!', 'success');
+        return;
+      }
+    } catch (err) {
+      // User cancelled or error — fall through to manual flow
+      if (err.name === 'AbortError') {
+        showDesignToast('Share cancelled.', 'info');
+        return;
+      }
+    }
+  }
+
+  // --- DESKTOP FALLBACK: Download image + open WhatsApp text ---
+  // Auto-download the canvas PNG
+  const downloadUrl = URL.createObjectURL(designBlob);
+  const a = document.createElement('a');
+  a.href = downloadUrl;
+  a.download = 'darbo-design.png';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(downloadUrl);
+
+  showDesignToast('Design downloaded! Attach it in WhatsApp.', 'success');
+
+  // Small delay so download starts before new tab opens
+  setTimeout(() => {
+    window.open(waUrl, '_blank');
+  }, 500);
 }
 
 // ============================================================
